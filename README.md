@@ -1,2 +1,2 @@
 # module-membership
-Membership and Governance module for Noria Network
+Noria Network's Membership and Governance module

@@ -1,0 +1,115 @@
+version: 1
+accounts:
+  - name: val1 # mm1e7gp56hf85nk0qtg0542gmmmwq753ww2tg7dws / mmvaloper1e7gp56hf85nk0qtg0542gmmmwq753ww2alfd43
+    mnemonic: "mimic eye cloud junior announce behind lesson coach flight number chronic mango lawsuit tag squirrel left bundle usual buzz flag visual patient afraid seek"
+    coins:
+      - 1000000000ucrd
+      - 1000000000unoria
+  - name: me # mm16rcnqanqy8e99lnzus9tgs8qug6l9r0q9l9vvn
+    mnemonic: "actress vessel observe sure sauce excite cabin bid second table crowd start submit twenty tube what chalk front work across clarify curve struggle rather"
+    coins:
+      - 1000000000ucrd
+      - 1000000000unoria
+  - name: faucet # mm1xy4fnsmd85gupclqudts7ffjpjwj6jg0d3f0h5
+    mnemonic: "exotic day decline feed retire figure riot wire asthma excess buffalo super dilemma mom pink lion unique health glow silver option scheme easy second"
+    coins:
+      - 1000000000ucrd
+      - 1000000000unoria
+client:
+  openapi:
+    path: docs/static/openapi.yml
+faucet:
+  name: faucet
+  coins:
+    - 10000000ucrd
+    - 10000000unoria
+build:
+  main: ./cmd/membershipd
+  binary: membershipd
+genesis:
+  app_state:
+    bank:
+      denom_metadata:
+        - base: ucrd
+          denom_units:
+            - aliases:
+                - microcrd
+              denom: ucrd
+              exponent: 0
+            - aliases: []
+              denom: crd
+              exponent: 6
+          description: The Cooperative Denom token
+          display: crd
+          name: CRD
+          symbol: CRD
+        - base: unoria
+          denom_units:
+            - aliases:
+                - micronoria
+              denom: unoria
+              exponent: 0
+            - aliases: []
+              denom: noria
+              exponent: 6
+          description: The native staking token of Noria
+          display: noria
+          name: NORIA
+          symbol: NORIA
+    distribution:
+      params:
+        community_tax: "0.0"
+    gov:
+      params:
+        max_deposit_period: 30s
+        min_deposit:
+        - amount: "1000000"
+          denom: unoria
+        voting_period: 30s
+        quorum: "0.000001"
+        threshold: "0.000001"
+      voting_params:
+        voting_period: 30s
+      tally_params:
+        quorum: "0.000001"
+        threshold: "0.000001"
+        veto_threshold: "0.334"
+    membership:
+      params:
+        total_voting_weight: "0.51"
+        guardians: "mm16rcnqanqy8e99lnzus9tgs8qug6l9r0q9l9vvn,mm1e7gp56hf85nk0qtg0542gmmmwq753ww2tg7dws"
+    mint:
+      minter:
+        annual_provisions: "0.0"
+        inflation: "0.0"
+      params:
+        blocks_per_year: "6307200"
+        inflation_max: "0.0"
+        inflation_min: "0.0"
+        inflation_rate_change: "0.0"
+        mint_denom: unoria
+    staking:
+      params:
+        bond_denom: unoria
+    tokenfactory:
+      params:
+        denom_creation_fee:
+          - amount: "1000000"
+            denom: ucrd
+  chain_id: mmchain-1
+validators:
+- name: me
+  bonded: 400000000unoria
+  app:
+    api:
+      enable: true
+      swagger: true
+  config:
+    consensus:
+      timeout_commit: 5s
+      timeout_precommit: 1s
+      timeout_precommit_delta: 500ms
+      timeout_prevote: 1s
+      timeout_prevote_delta: 500ms
+      timeout_propose: 3s
+      timeout_propose_delta: 500ms

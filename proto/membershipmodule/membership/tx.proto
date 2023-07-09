@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package membershipmodule.membership;
+
+import "membershipmodule/membership/member.proto";
+
+option go_package = "github.com/noria-net/module-membership/x/membership/types";
+
+// Msg defines the Msg service.
+service Msg {
+  rpc Enroll       (MsgEnroll      ) returns (MsgEnrollResponse      );
+  rpc UpdateStatus (MsgUpdateStatus) returns (MsgUpdateStatusResponse);
+}
+message MsgEnroll {
+  string creator  = 1;
+  string nickname = 3;
+}
+
+message MsgEnrollResponse {}
+
+message MsgUpdateStatus {
+  string creator = 1;
+  string address = 2;
+  MembershipStatus status  = 3;
+}
+
+message MsgUpdateStatusResponse {}
+
