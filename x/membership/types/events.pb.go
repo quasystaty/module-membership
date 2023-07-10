@@ -22,7 +22,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// EventMemberEnrolled is an event emitted when a new member joins The Denom
+// EventMemberEnrolled is an event emitted when a new member is enrolled
 type EventMemberEnrolled struct {
 	MemberAddress string `protobuf:"bytes,1,opt,name=member_address,json=memberAddress,proto3" json:"member_address,omitempty"`
 }

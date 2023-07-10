@@ -2,7 +2,7 @@
 
 PROPOSAL_FILE=$1
 KEY_NAME=$2
-BINARY_DIR=".membership-module"
+BINARY_DIR=".module-membership"
 CHAIN_ID="mmchain-1"
 DENOM="unoria"
 GAS_PRICE_DENOM="ucrd"

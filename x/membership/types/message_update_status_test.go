@@ -4,37 +4,49 @@ import (
 	"testing"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/noria-net/module-membership/testutil/sample"
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestMsgUpdateStatus_ValidateBasic(t *testing.T) {
-	tests := []struct {
-		name string
-		msg  MsgUpdateStatus
-		err  error
-	}{
-		{
-			name: "invalid address",
-			msg: MsgUpdateStatus{
-				Creator: "invalid_address",
-			},
-			err: sdkerrors.ErrInvalidAddress,
-		}, {
-			name: "valid address",
-			msg: MsgUpdateStatus{
-				Creator: sample.AccAddress(),
-			},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			err := tt.msg.ValidateBasic()
-			if tt.err != nil {
-				require.ErrorIs(t, err, tt.err)
-				return
-			}
-			require.NoError(t, err)
-		})
-	}
+
+	valid_1 := "cosmos1l0znsvddllw9knha3yx2svnlxny676d8ns7uys"
+	valid_2 := "cosmos1j8pp7zvcu9z8vd882m284j29fn2dszh05cqvf9"
+	invalid := "invalid_address"
+
+	t.Run("invalid creator address", func(t *testing.T) {
+		msg := MsgUpdateStatus{
+			Creator: invalid,
+		}
+		err := msg.ValidateBasic()
+		assert.ErrorIs(t, err, sdkerrors.ErrInvalidAddress)
+	})
+
+	t.Run("invalid Target address", func(t *testing.T) {
+		msg := MsgUpdateStatus{
+			Creator: valid_1,
+			Address: invalid,
+		}
+		err := msg.ValidateBasic()
+		assert.ErrorIs(t, err, sdkerrors.ErrInvalidAddress)
+	})
+
+	t.Run("invalid membership status", func(t *testing.T) {
+		msg := MsgUpdateStatus{
+			Creator: valid_1,
+			Address: valid_2,
+			Status:  MembershipStatus(100),
+		}
+		err := msg.ValidateBasic()
+		assert.ErrorIs(t, err, ErrInvalidMembershipStatus)
+	})
+
+	t.Run("membership status cannot be undefined / zero", func(t *testing.T) {
+		msg := MsgUpdateStatus{
+			Creator: valid_1,
+			Address: valid_2,
+			Status:  MembershipStatus(0),
+		}
+		err := msg.ValidateBasic()
+		assert.ErrorIs(t, err, ErrInvalidMembershipStatus)
+	})
 }

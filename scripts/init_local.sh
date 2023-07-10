@@ -9,7 +9,7 @@
 # but rather to work in a local development environment.
 
 BINARY_NAME="membershipd"
-BINARY_HOME="$HOME/.membership-module"
+BINARY_HOME="$HOME/.module-membership"
 CONFIG_HOME="$BINARY_HOME/config"
 CHAIN_ID="mmchain-1"
 DENOM="unoria"

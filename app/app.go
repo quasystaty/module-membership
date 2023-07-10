@@ -132,11 +132,11 @@ import (
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
-const AppName = "membership-module"
+const AppName = "module-membership"
 
 // We pull these out so we can set them with LDFLAGS in the Makefile
 var (
-	NodeDir      = ".membership-module"
+	NodeDir      = ".module-membership"
 	Bech32Prefix = "mm"
 
 	// If EnabledSpecificProposals is "", and this is "true", then enable all x/wasm proposals.
