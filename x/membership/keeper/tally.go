@@ -28,8 +28,6 @@ func (k Keeper) Tally(ctx sdk.Context, proposal govtypes_v1.Proposal) (passes bo
 	)
 
 	k.IterateVotes(ctx, proposal.Id, func(vote govtypes_v1.Vote) (stop bool) {
-		stop = false
-
 		// Create a custom logger for this voter
 		voterLogger := ctx.WithLogger(ctx.Logger().With("voter", vote.Voter))
 
@@ -51,7 +49,7 @@ func (k Keeper) Tally(ctx sdk.Context, proposal govtypes_v1.Proposal) (passes bo
 		// Delete this vote, now that its been processed
 		k.deleteVote(ctx, vote.ProposalId, voterAddress)
 
-		return stop
+		return false
 	})
 
 	govParams := k.GetGovParams(ctx)
