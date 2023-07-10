@@ -11,7 +11,7 @@ import (
 func TestSplitStringIntoAddresses(t *testing.T) {
 	valid_1 := "cosmos1l0znsvddllw9knha3yx2svnlxny676d8ns7uys"
 	valid_2 := "cosmos1j8pp7zvcu9z8vd882m284j29fn2dszh05cqvf9"
-	invalid := "invalidaddress"
+	invalid := "invalid_address"
 
 	t.Run("Valid addresses", func(t *testing.T) {
 		addresses, err := SplitStringIntoAddresses(fmt.Sprintf("%s,%s", valid_1, valid_2))
