@@ -16,6 +16,26 @@ they won't make sense in the normal gov sense.
 
 ### Calculating the Result
 
+Discord Link: https://discord.com/channels/@me/1043251283575967835/1119365159455047812
+
+```
+NormalMember_Amount = Members_Amount - Guardian_Amount
+Guardian_Power = GuardianWeight / Guardian_Amount
+NormalMember_Power = (1-GuardianWeight) / NormalMember_Amount
+
+VotePortion = Guardian_Votes * Guardian_Power + NormalMember_Votes * NormalMember_Power
+CombinedVotingPower = VotePortion
+
+YesPortion = (Guardian_YesVotes / Guardian_Votes) * Guardian_Power + (NormalMember_YesVotes / NormalMember_Votes) * NormalMember_Power
+
+VetoPortion = (Guardian_NoWithVetoVotes / (Guardian_Votes - Guardian_AbstainVotes)) * Guardian_Power + (NormalMember_NoWithVetoVotes / (NormalMember_Votes - NormalMember_AbstainVotes)) * NormalMember_Power
+
+ChorumReached = VotePortion > 1/3
+or, ChorumReached = CombinedVotingPower > 1/3
+
+ProposalPassed = YesPortion > 0.5 && VetoPortion < 1/3
+```
+
 ```
 NormalMember_Amount = Members_Amount - Guardian_Amount
 Guardian_Power = GuardianWeight / Guardian_Amount

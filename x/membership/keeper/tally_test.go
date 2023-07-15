@@ -124,15 +124,15 @@ func (suite *CalculateVoteResultsTestSuite) SetupTest() {
 	proposalId := uint64(1)
 	suite.proposor = createMember(address_1)
 	suite.proposal = mustCreateProposal(proposalId, suite.proposor.Address)
-	thirtySeconds := time.Duration(30) * time.Second
+	period := time.Duration(30) * time.Second
 
 	suite.govParams = govtypes_v1.NewParams(
 		// Minimum Deposit
 		sdk.NewCoins(sdk.NewCoin("stake", sdk.NewInt(1000000))),
 		// Max deposit period
-		thirtySeconds,
+		period,
 		// Voting period
-		thirtySeconds,
+		period,
 		// Quorum
 		"0.334",
 		// Threshold
@@ -317,6 +317,8 @@ func (suite *CalculateVoteResultsTestSuite) Test_OnlyMembersVoteAndQuorumIsNotRe
 	addVote(memberResults, govtypes_v1.OptionYes)
 	addVote(memberResults, govtypes_v1.OptionYes)
 
+	// TODO: Apply the Total Voting Power weighting to the quorum calculation
+
 	passes, burnDeposits, tallyResults := calculateVoteResults(*suite.proposal,
 		suite.govParams,
 		memberResults,
@@ -346,10 +348,10 @@ func (suite *CalculateCombinedTallyResultsTestSuite) Test_NoVotingResultsEmptyCo
 	memberPower, guardianPower := calculateVotePower(2, 1, math.LegacyNewDec(51))
 
 	// Execute test
-	combinedResults, combinedVotingPower := calculateCombinedTallyResults(memberResults, guardianResults, memberPower, guardianPower)
+	combined := calculateCombinedTallyResults(memberResults, guardianResults, memberPower, guardianPower)
 
-	suite.Assert().True(areAllOptionsZeroDec(combinedResults))
-	suite.Assert().True(combinedVotingPower.IsZero())
+	suite.Assert().True(areAllOptionsZeroDec(combined.results))
+	suite.Assert().True(combined.votingPower.IsZero())
 }
 
 // Test Case: Only member votes, combined results are member results
@@ -363,16 +365,17 @@ func (suite *CalculateCombinedTallyResultsTestSuite) Test_OnlyMemberVotesCombine
 	addVote(memberResults, govtypes_v1.OptionYes)
 
 	// Execute test
-	combinedResults, combinedVotingPower := calculateCombinedTallyResults(memberResults, guardianResults, memberPower, guardianPower)
+	combined := calculateCombinedTallyResults(memberResults, guardianResults, memberPower, guardianPower)
 
 	// Only one vote cast
-	suite.Assert().True(isOptionValueEqualTo(combinedResults, govtypes_v1.OptionYes, totalVotingPower))
+	suite.Assert().True(isOptionValueEqualTo(combined.results, govtypes_v1.OptionYes, math.LegacyMustNewDecFromStr("100").Sub(totalVotingPower)))
+
 	// All others must be zero
-	suite.Assert().True(isOptionValueZero(combinedResults, govtypes_v1.OptionNo))
-	suite.Assert().True(isOptionValueZero(combinedResults, govtypes_v1.OptionAbstain))
-	suite.Assert().True(isOptionValueZero(combinedResults, govtypes_v1.OptionNoWithVeto))
+	suite.Assert().True(isOptionValueZero(combined.results, govtypes_v1.OptionNo))
+	suite.Assert().True(isOptionValueZero(combined.results, govtypes_v1.OptionAbstain))
+	suite.Assert().True(isOptionValueZero(combined.results, govtypes_v1.OptionNoWithVeto))
 	// Voting power should be 49%
-	suite.Assert().True(combinedVotingPower.Equal(math.LegacyNewDec(49)))
+	suite.Assert().True(combined.votingPower.Equal(math.LegacyNewDec(49)))
 }
 
 // Test Case: Only guardian votes, combined results are guardian results
@@ -386,16 +389,16 @@ func (suite *CalculateCombinedTallyResultsTestSuite) Test_OnlyGuardianVotesCombi
 	addVote(guardianResults, govtypes_v1.OptionYes)
 
 	// Execute test
-	combinedResults, combinedVotingPower := calculateCombinedTallyResults(memberResults, guardianResults, memberPower, guardianPower)
+	combined := calculateCombinedTallyResults(memberResults, guardianResults, memberPower, guardianPower)
 
 	// Only one vote cast
-	suite.Assert().True(isOptionValueEqualTo(combinedResults, govtypes_v1.OptionYes, totalVotingPower))
+	suite.Assert().True(isOptionValueEqualTo(combined.results, govtypes_v1.OptionYes, totalVotingPower))
 	// All others must be zero
-	suite.Assert().True(isOptionValueZero(combinedResults, govtypes_v1.OptionNo))
-	suite.Assert().True(isOptionValueZero(combinedResults, govtypes_v1.OptionAbstain))
-	suite.Assert().True(isOptionValueZero(combinedResults, govtypes_v1.OptionNoWithVeto))
+	suite.Assert().True(isOptionValueZero(combined.results, govtypes_v1.OptionNo))
+	suite.Assert().True(isOptionValueZero(combined.results, govtypes_v1.OptionAbstain))
+	suite.Assert().True(isOptionValueZero(combined.results, govtypes_v1.OptionNoWithVeto))
 	// Voting power should be 51%
-	suite.Assert().True(combinedVotingPower.Equal(totalVotingPower))
+	suite.Assert().True(combined.votingPower.Equal(totalVotingPower))
 }
 
 // Test Case: Member and guardian vote yes, combined results are combined yes
@@ -411,16 +414,16 @@ func (suite *CalculateCombinedTallyResultsTestSuite) Test_MemberAndGuardianVoteY
 	addVote(memberResults, govtypes_v1.OptionYes)
 
 	// Execute test
-	combinedResults, combinedVotingPower := calculateCombinedTallyResults(memberResults, guardianResults, memberPower, guardianPower)
+	combined := calculateCombinedTallyResults(memberResults, guardianResults, memberPower, guardianPower)
 
 	// Only one vote cast
-	suite.Assert().True(isOptionValueEqualTo(combinedResults, govtypes_v1.OptionYes, math.LegacyNewDec(100)))
+	suite.Assert().True(isOptionValueEqualTo(combined.results, govtypes_v1.OptionYes, math.LegacyNewDec(100)))
 	// All others must be zero
-	suite.Assert().True(isOptionValueZero(combinedResults, govtypes_v1.OptionNo))
-	suite.Assert().True(isOptionValueZero(combinedResults, govtypes_v1.OptionAbstain))
-	suite.Assert().True(isOptionValueZero(combinedResults, govtypes_v1.OptionNoWithVeto))
+	suite.Assert().True(isOptionValueZero(combined.results, govtypes_v1.OptionNo))
+	suite.Assert().True(isOptionValueZero(combined.results, govtypes_v1.OptionAbstain))
+	suite.Assert().True(isOptionValueZero(combined.results, govtypes_v1.OptionNoWithVeto))
 	// Voting power should be 100%
-	suite.Assert().True(combinedVotingPower.Equal(math.LegacyNewDec(100)))
+	suite.Assert().True(combined.votingPower.Equal(math.LegacyNewDec(100)))
 }
 
 // Test Case: Member votes yes and guardian votes no
@@ -436,15 +439,15 @@ func (suite *CalculateCombinedTallyResultsTestSuite) Test_MemberVotesYesAndGuard
 	addVote(memberResults, govtypes_v1.OptionNo)
 
 	// Execute test
-	combinedResults, combinedVotingPower := calculateCombinedTallyResults(memberResults, guardianResults, memberPower, guardianPower)
+	combined := calculateCombinedTallyResults(memberResults, guardianResults, memberPower, guardianPower)
 
-	suite.Assert().True(isOptionValueEqualTo(combinedResults, govtypes_v1.OptionYes, totalVotingPower))
-	suite.Assert().True(isOptionValueEqualTo(combinedResults, govtypes_v1.OptionNo, math.LegacyNewDec(49)))
+	suite.Assert().True(isOptionValueEqualTo(combined.results, govtypes_v1.OptionYes, totalVotingPower))
+	suite.Assert().True(isOptionValueEqualTo(combined.results, govtypes_v1.OptionNo, math.LegacyNewDec(49)))
 	// All others must be zero
-	suite.Assert().True(isOptionValueZero(combinedResults, govtypes_v1.OptionAbstain))
-	suite.Assert().True(isOptionValueZero(combinedResults, govtypes_v1.OptionNoWithVeto))
+	suite.Assert().True(isOptionValueZero(combined.results, govtypes_v1.OptionAbstain))
+	suite.Assert().True(isOptionValueZero(combined.results, govtypes_v1.OptionNoWithVeto))
 	// Voting power should be 100%
-	suite.Assert().True(combinedVotingPower.Equal(math.LegacyNewDec(100)))
+	suite.Assert().True(combined.votingPower.Equal(math.LegacyNewDec(100)))
 }
 
 // Test Case: Two guardians, two members, one guardian votes no, everyone votes yes
@@ -462,15 +465,15 @@ func (suite *CalculateCombinedTallyResultsTestSuite) Test_TwoGuardiansTwoMembers
 	addVote(guardianResults, govtypes_v1.OptionYes)
 
 	// Execute test
-	combinedResults, combinedVotingPower := calculateCombinedTallyResults(memberResults, guardianResults, memberPower, guardianPower)
+	combined := calculateCombinedTallyResults(memberResults, guardianResults, memberPower, guardianPower)
 
-	suite.Assert().True(isOptionValueEqualTo(combinedResults, govtypes_v1.OptionYes, math.LegacyMustNewDecFromStr("74.5")))
-	suite.Assert().True(isOptionValueEqualTo(combinedResults, govtypes_v1.OptionNo, math.LegacyMustNewDecFromStr("25.5")))
+	suite.Assert().True(isOptionValueEqualTo(combined.results, govtypes_v1.OptionYes, math.LegacyMustNewDecFromStr("74.5")))
+	suite.Assert().True(isOptionValueEqualTo(combined.results, govtypes_v1.OptionNo, math.LegacyMustNewDecFromStr("25.5")))
 	// All others must be zero
-	suite.Assert().True(isOptionValueZero(combinedResults, govtypes_v1.OptionAbstain))
-	suite.Assert().True(isOptionValueZero(combinedResults, govtypes_v1.OptionNoWithVeto))
+	suite.Assert().True(isOptionValueZero(combined.results, govtypes_v1.OptionAbstain))
+	suite.Assert().True(isOptionValueZero(combined.results, govtypes_v1.OptionNoWithVeto))
 	// Voting power should be 100%
-	suite.Assert().True(combinedVotingPower.Equal(math.LegacyNewDec(100)))
+	suite.Assert().True(combined.votingPower.Equal(math.LegacyNewDec(100)))
 }
 
 // Run test suite
