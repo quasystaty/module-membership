@@ -45,7 +45,7 @@ func (k Keeper) Tally(ctx sdk.Context, proposal govtypes_v1.Proposal) (passes bo
 		member, found := k.GetMemberAccount(ctx, voterAddress)
 
 		err := processSingleVote(vote,
-			member,
+			&member,
 			found,
 			memberResults,
 			guardianResults,

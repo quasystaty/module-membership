@@ -77,7 +77,7 @@ genesis:
     membership:
       params:
         total_voting_weight: "0.51"
-        guardians: "mm16rcnqanqy8e99lnzus9tgs8qug6l9r0q9l9vvn,mm1e7gp56hf85nk0qtg0542gmmmwq753ww2tg7dws"
+        guardians: "mm1e7gp56hf85nk0qtg0542gmmmwq753ww2tg7dws"
     mint:
       minter:
         annual_provisions: "0.0"

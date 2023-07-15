@@ -34,7 +34,7 @@ func (k Keeper) GetGuardians(ctx sdk.Context) []*types.Member {
 		// Guardian must be a member with a status of MemberElectorate
 		if found && member.Status == types.MembershipStatus_MemberElectorate {
 			member.IsGuardian = true
-			guardians = append(guardians, member)
+			guardians = append(guardians, &member)
 		}
 	}
 

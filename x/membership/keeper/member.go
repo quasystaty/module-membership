@@ -8,16 +8,19 @@ import (
 	"github.com/noria-net/module-membership/x/membership/types"
 )
 
-func (k Keeper) GetMemberAccount(ctx sdk.Context, address sdk.AccAddress) (member *types.Member, found bool) {
+func (k Keeper) GetMemberAccount(ctx sdk.Context, address sdk.AccAddress) (types.Member, bool) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte{})
 	key := types.MemberKey(address)
+	var member types.Member
 
 	var b []byte
 	if b = store.Get(key); b == nil {
 		return member, false
 	}
 
-	k.cdc.Unmarshal(b, member)
+	if err := k.cdc.Unmarshal(b, &member); err != nil {
+		panic(err)
+	}
 
 	// Get member guardianship status
 	member.IsGuardian = k.IsWhitelistedGuardian(ctx, address) &&
@@ -115,7 +118,7 @@ func (k Keeper) UpdateMemberStatus(ctx sdk.Context, target sdk.AccAddress, s typ
 	member.Status = s
 
 	// Marshal and Set
-	memberData := k.cdc.MustMarshal(member)
+	memberData := k.cdc.MustMarshal(&member)
 	store.Set(key, memberData)
 
 	// Update the status counts
