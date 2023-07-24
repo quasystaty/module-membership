@@ -11,11 +11,11 @@ import (
 )
 
 // VoteOptions is a map of vote options to the number of votes for that option
-type VoteOptions map[govtypes_v1.VoteOption]math.Int
+type voteOptions map[govtypes_v1.VoteOption]math.Int
 
-// CombinedTallyResults is a struct containing the results of a tally of both
+// combinedTallyResults is a struct containing the results of a tally of both
 // guardian and regular member votes
-type CombinedTallyResults struct {
+type combinedTallyResults struct {
 	results          map[govtypes_v1.VoteOption]math.LegacyDec
 	votingPower      math.LegacyDec
 	numGuardianVotes math.Int
@@ -77,8 +77,8 @@ func (k Keeper) Tally(ctx sdk.Context, proposal govtypes_v1.Proposal) (passes bo
 func processSingleVote(vote govtypes_v1.Vote,
 	member *types.Member,
 	found bool,
-	memberResults VoteOptions,
-	guardianResults VoteOptions) error {
+	memberResults voteOptions,
+	guardianResults voteOptions) error {
 
 	// voter must be a denom member
 	if !found {
@@ -144,8 +144,8 @@ func getVoterChoice(options []*govtypes_v1.WeightedVoteOption) govtypes_v1.VoteO
 
 func calculateVoteResults(proposal govtypes_v1.Proposal,
 	govParams govtypes_v1.Params,
-	memberResults VoteOptions,
-	guardianResults VoteOptions,
+	memberResults voteOptions,
+	guardianResults voteOptions,
 	memberPower sdk.Dec,
 	guardianPower sdk.Dec) (passes bool, burnDeposits bool, tallyResults govtypes_v1.TallyResult) {
 
@@ -211,7 +211,7 @@ func calculateVotePower(numElectorateMembers int64, numGuardians int64, totalVot
 }
 
 // makeResultMap returns a map with all the vote options set to 0
-func NewEmptyVoteOptions() VoteOptions {
+func NewEmptyVoteOptions() voteOptions {
 	results := make(map[govtypes_v1.VoteOption]math.Int)
 	results[govtypes_v1.OptionYes] = math.ZeroInt()
 	results[govtypes_v1.OptionAbstain] = math.ZeroInt()
@@ -226,8 +226,8 @@ func calculateCombinedTallyResults(memberResults,
 	guardianResults map[govtypes_v1.VoteOption]math.Int,
 	memberPower sdk.Dec,
 	guardianPower sdk.Dec,
-) CombinedTallyResults {
-	combined := CombinedTallyResults{
+) combinedTallyResults {
+	combined := combinedTallyResults{
 		results:          make(map[govtypes_v1.VoteOption]math.LegacyDec),
 		votingPower:      sdk.ZeroDec(),
 		numGuardianVotes: math.ZeroInt(),
@@ -248,7 +248,7 @@ func calculateCombinedTallyResults(memberResults,
 }
 
 // calculateVeto calculates the weighted veto of a group of voters
-func calculateVeto(results VoteOptions, numVotes math.Int, power math.LegacyDec) math.LegacyDec {
+func calculateVeto(results voteOptions, numVotes math.Int, power math.LegacyDec) math.LegacyDec {
 	// Cannot calculate weighted veto if there are no votes
 	if numVotes.IsZero() {
 		return math.LegacyNewDec(0)

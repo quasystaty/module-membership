@@ -53,8 +53,8 @@ func (suite *ProcessSingleVoteTestSuite) Test_VoterIsNotEligibleToVote() {
 	option := govtypes_v1.NewWeightedVoteOption(govtypes_v1.OptionYes, sdk.NewDec(1))
 
 	var member *types.Member
-	var memberResults VoteOptions
-	var guardianResults VoteOptions
+	var memberResults voteOptions
+	var guardianResults voteOptions
 	var vote govtypes_v1.Vote
 
 	// Test all membership statuses
@@ -483,7 +483,7 @@ func TestCalculateVotePowerTestSuite(t *testing.T) {
 
 // Helper functions
 
-func areAllOptionsZero(voteOptions VoteOptions) bool {
+func areAllOptionsZero(voteOptions voteOptions) bool {
 	for _, option := range voteOptions {
 		if !option.IsZero() {
 			return false
@@ -501,7 +501,7 @@ func areAllOptionsZeroDec(options map[govtypes_v1.VoteOption]math.LegacyDec) boo
 	return true
 }
 
-func isOnlyOneOptionSelected(voteOptions VoteOptions, option govtypes_v1.VoteOption) bool {
+func isOnlyOneOptionSelected(voteOptions voteOptions, option govtypes_v1.VoteOption) bool {
 	// First make sure all the other options are zero
 	for vote, voteValue := range voteOptions {
 		if vote == option {
@@ -551,6 +551,6 @@ func mustCreateProposal(proposalId uint64, proposor string) *govtypes_v1.Proposa
 	return &proposal
 }
 
-func addVote(voteOptions VoteOptions, option govtypes_v1.VoteOption) {
+func addVote(voteOptions voteOptions, option govtypes_v1.VoteOption) {
 	voteOptions[option] = voteOptions[option].Add(sdk.NewInt(1))
 }
