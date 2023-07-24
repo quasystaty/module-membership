@@ -67,7 +67,8 @@ type GovKeeper struct {
 	Hooks govtypes.GovHooks
 }
 
-// NewExtendedGovKeeper creates a new instance of GovKeeper with hooks
+// NewExtendedGovKeeper creates a new instance of GovKeeper with a
+// snapshot of the hooks to be run on gov state transitions.
 func NewExtendedGovKeeper(gk govkeeper.Keeper) GovKeeper {
 	return GovKeeper{
 		internalGovKeeper: gk,

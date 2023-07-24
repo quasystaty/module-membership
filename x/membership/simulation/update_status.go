@@ -12,7 +12,6 @@ import (
 
 func SimulateMsgUpdateStatus(
 	ak types.AccountKeeper,
-	bk types.BankKeeper,
 	k keeper.Keeper,
 ) simtypes.Operation {
 	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,

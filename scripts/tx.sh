@@ -38,9 +38,9 @@ done
 
 if [ "$CODE" -ne 0 ]; then
   RAWLOG=$(echo "$MSG" | jq '.raw_log')
-  echo -e "\nError [code $CODE]: $RAWLOG"
+  echo -e "Error [code $CODE]: $RAWLOG"
   exit 1
 else
-  echo -e "\nSuccess: $HASH"
+  echo -e "Success: $HASH"
   exit 0
 fi

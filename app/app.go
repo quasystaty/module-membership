@@ -659,15 +659,20 @@ func NewWasmApp(
 	wasmStack = wasm.NewIBCHandler(app.WasmKeeper, app.IBCKeeper.ChannelKeeper, app.IBCFeeKeeper)
 	wasmStack = ibcfee.NewIBCMiddleware(wasmStack, app.IBCFeeKeeper)
 
+	extendedGovKeeper := membershiptypes.NewExtendedGovKeeper(app.GovKeeper)
 	app.MembershipKeeper = *membershipkeeper.NewKeeper(
 		appCodec,
 		keys[membershiptypes.StoreKey],
 		keys[membershiptypes.MemStoreKey],
 		app.GetSubspace(membershiptypes.ModuleName),
 		app.AccountKeeper,
-		membershiptypes.NewExtendedGovKeeper(app.GovKeeper),
+		extendedGovKeeper,
 	)
-	membershipModule := membership.NewAppModule(appCodec, app.MembershipKeeper, app.AccountKeeper, app.BankKeeper)
+	membershipModule := membership.NewAppModule(appCodec,
+		app.MembershipKeeper,
+		app.AccountKeeper,
+		extendedGovKeeper,
+	)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
@@ -732,7 +737,10 @@ func NewWasmApp(
 	app.ModuleManager.SetOrderBeginBlockers(
 		upgradetypes.ModuleName, capabilitytypes.ModuleName, minttypes.ModuleName, distrtypes.ModuleName, slashingtypes.ModuleName,
 		evidencetypes.ModuleName, stakingtypes.ModuleName,
-		authtypes.ModuleName, banktypes.ModuleName, govtypes.ModuleName, crisistypes.ModuleName, genutiltypes.ModuleName,
+		authtypes.ModuleName, banktypes.ModuleName,
+		membershiptypes.ModuleName,
+		govtypes.ModuleName,
+		crisistypes.ModuleName, genutiltypes.ModuleName,
 		authz.ModuleName, feegrant.ModuleName, nft.ModuleName, group.ModuleName,
 		paramstypes.ModuleName, vestingtypes.ModuleName, consensusparamtypes.ModuleName,
 		// additional non simd modules
@@ -741,12 +749,14 @@ func NewWasmApp(
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
 		wasm.ModuleName,
-		membershiptypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
 	app.ModuleManager.SetOrderEndBlockers(
-		crisistypes.ModuleName, govtypes.ModuleName, stakingtypes.ModuleName,
+		crisistypes.ModuleName,
+		membershiptypes.ModuleName,
+		govtypes.ModuleName,
+		stakingtypes.ModuleName,
 		capabilitytypes.ModuleName, authtypes.ModuleName, banktypes.ModuleName, distrtypes.ModuleName,
 		slashingtypes.ModuleName, minttypes.ModuleName,
 		genutiltypes.ModuleName, evidencetypes.ModuleName, authz.ModuleName,
@@ -758,7 +768,6 @@ func NewWasmApp(
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
 		wasm.ModuleName,
-		membershiptypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
