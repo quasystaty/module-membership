@@ -344,8 +344,9 @@ func (suite *CalculateCombinedTallyResultsTestSuite) SetupTest() {
 func (suite *CalculateCombinedTallyResultsTestSuite) Test_NoVotingResultsEmptyCombinedResults() {
 	memberResults := NewEmptyVoteOptions()
 	guardianResults := NewEmptyVoteOptions()
+	totalVotingPower := math.LegacyMustNewDecFromStr("0.51")
 	// Two members, one guardian, 51% voting power
-	memberPower, guardianPower := calculateVotePower(2, 1, math.LegacyNewDec(51))
+	memberPower, guardianPower := calculateVotePower(2, 1, totalVotingPower)
 
 	// Execute test
 	combined := calculateCombinedTallyResults(memberResults, guardianResults, memberPower, guardianPower)
@@ -358,7 +359,7 @@ func (suite *CalculateCombinedTallyResultsTestSuite) Test_NoVotingResultsEmptyCo
 func (suite *CalculateCombinedTallyResultsTestSuite) Test_OnlyMemberVotesCombinedResultsAreMemberResults() {
 	memberResults := NewEmptyVoteOptions()
 	guardianResults := NewEmptyVoteOptions()
-	totalVotingPower := math.LegacyNewDec(51)
+	totalVotingPower := math.LegacyMustNewDecFromStr("0.51")
 	// Two members, one guardian, 51% voting power
 	memberPower, guardianPower := calculateVotePower(2, 1, totalVotingPower)
 	// Member votes yes
@@ -382,7 +383,7 @@ func (suite *CalculateCombinedTallyResultsTestSuite) Test_OnlyMemberVotesCombine
 func (suite *CalculateCombinedTallyResultsTestSuite) Test_OnlyGuardianVotesCombinedResultsAreGuardianResults() {
 	memberResults := NewEmptyVoteOptions()
 	guardianResults := NewEmptyVoteOptions()
-	totalVotingPower := math.LegacyNewDec(51)
+	totalVotingPower := math.LegacyMustNewDecFromStr("0.51")
 	// Two members, one guardian, 51% voting power
 	memberPower, guardianPower := calculateVotePower(2, 1, totalVotingPower)
 	// Guardian votes yes
@@ -405,7 +406,7 @@ func (suite *CalculateCombinedTallyResultsTestSuite) Test_OnlyGuardianVotesCombi
 func (suite *CalculateCombinedTallyResultsTestSuite) Test_MemberAndGuardianVoteYesCombinedResultsAreCombinedYes() {
 	memberResults := NewEmptyVoteOptions()
 	guardianResults := NewEmptyVoteOptions()
-	totalVotingPower := math.LegacyNewDec(51)
+	totalVotingPower := math.LegacyMustNewDecFromStr("0.51")
 	// Two members, one guardian, 51% voting power
 	memberPower, guardianPower := calculateVotePower(2, 1, totalVotingPower)
 	// Guardian votes yes
@@ -430,7 +431,7 @@ func (suite *CalculateCombinedTallyResultsTestSuite) Test_MemberAndGuardianVoteY
 func (suite *CalculateCombinedTallyResultsTestSuite) Test_MemberVotesYesAndGuardianVotesNo() {
 	memberResults := NewEmptyVoteOptions()
 	guardianResults := NewEmptyVoteOptions()
-	totalVotingPower := math.LegacyNewDec(51)
+	totalVotingPower := math.LegacyMustNewDecFromStr("0.51")
 	// Two members, one guardian, 51% voting power
 	memberPower, guardianPower := calculateVotePower(2, 1, totalVotingPower)
 	// Guardian votes yes
@@ -454,7 +455,7 @@ func (suite *CalculateCombinedTallyResultsTestSuite) Test_MemberVotesYesAndGuard
 func (suite *CalculateCombinedTallyResultsTestSuite) Test_TwoGuardiansTwoMembersOneGuardianVotesNoEveryoneVotesYes() {
 	memberResults := NewEmptyVoteOptions()
 	guardianResults := NewEmptyVoteOptions()
-	totalVotingPower := math.LegacyNewDec(51)
+	totalVotingPower := math.LegacyMustNewDecFromStr("0.51")
 	// Two members, one guardian, 51% voting power
 	memberPower, guardianPower := calculateVotePower(4, 2, totalVotingPower)
 	// One guardian votes no

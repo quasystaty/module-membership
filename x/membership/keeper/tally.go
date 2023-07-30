@@ -27,6 +27,11 @@ type combinedTallyResults struct {
 // voters
 func (k Keeper) Tally(ctx sdk.Context, proposal govtypes_v1.Proposal) (passes bool, burnDeposits bool, tallyResults govtypes_v1.TallyResult) {
 
+	// Proposal can only be submitted by a member
+	if !k.IsMemberByBech32Address(ctx, proposal.Proposer) {
+		return false, false, govtypes_v1.TallyResult{}
+	}
+
 	memberResults := NewEmptyVoteOptions()
 	guardianResults := NewEmptyVoteOptions()
 	guardians := k.GetGuardians(ctx)
@@ -57,7 +62,7 @@ func (k Keeper) Tally(ctx sdk.Context, proposal govtypes_v1.Proposal) (passes bo
 		}
 
 		// Delete this vote, now that its been processed
-		k.deleteVote(ctx, vote.ProposalId, voterAddress)
+		k.markVoteForDeletion(ctx, vote)
 
 		return false
 	})
@@ -71,6 +76,13 @@ func (k Keeper) Tally(ctx sdk.Context, proposal govtypes_v1.Proposal) (passes bo
 		guardianPower)
 
 	return passes, burnDeposits, tallyResults
+}
+
+// MarkVoteForDeletion marks a vote for deletion in the future
+func (k Keeper) markVoteForDeletion(ctx sdk.Context, vote govtypes_v1.Vote) {
+	store := ctx.KVStore(k.storeKey)
+	bz := k.cdc.MustMarshal(&vote)
+	store.Set(types.VoteToDeleteKey(vote.ProposalId, sdk.AccAddress(vote.Voter)), bz)
 }
 
 // processSingleVote processes a single vote, updating the tally results
@@ -192,19 +204,12 @@ func calculateVoteResults(proposal govtypes_v1.Proposal,
 	return false, false, tallyResults
 }
 
-func (k Keeper) deleteVote(ctx sdk.Context, proposalID uint64, voter sdk.AccAddress) {
-	// TODO: ignore this call - we need Gov to open up deleteVote in their keeper first
-	// https://github.com/cosmos/cosmos-sdk/blob/v0.45.2/x/gov/keeper/vote.go#L129
-
-	// One option to handle this is to delete votes on an upgrade using a migration step
-}
-
 // calculateVotePower calculates the voting power of members and guardians
 func calculateVotePower(numElectorateMembers int64, numGuardians int64, totalVotingWeight math.LegacyDec) (memberPower math.LegacyDec, guardianPower math.LegacyDec) {
 
 	// Member count excludes guardians
 	numMembers := numElectorateMembers - numGuardians
-	memberPower = sdk.NewDec(100).Sub(totalVotingWeight).QuoInt64(numMembers)
+	memberPower = sdk.NewDec(1).Sub(totalVotingWeight).QuoInt64(numMembers)
 	guardianPower = totalVotingWeight.QuoInt64(numGuardians)
 
 	return memberPower, guardianPower
