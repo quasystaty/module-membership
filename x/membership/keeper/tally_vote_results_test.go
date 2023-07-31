@@ -89,7 +89,6 @@ func (suite *CalculateVoteResultsTestSuite) Test_GuardiansVoteYesMembersVoteNoAn
 		memberPower,
 		guardianPower)
 
-	printTallyResultsToConsole(tallyResults)
 	suite.Assert().True(passes, "proposal should pass, got %v", passes)
 	suite.Assert().Equal(suite.govParams.BurnProposalDepositPrevote, burnDeposits)
 	suite.Assert().Equal("51", tallyResults.GetYesCount())
@@ -114,7 +113,6 @@ func (suite *CalculateVoteResultsTestSuite) Test_GuardiansVoteNoMembersVoteYesAn
 
 	suite.Assert().False(passes)
 	suite.Assert().False(burnDeposits)
-	printTallyResultsToConsole(tallyResults)
 	suite.Assert().Equal("49", tallyResults.GetYesCount())
 }
 
@@ -187,7 +185,6 @@ func (suite *CalculateVoteResultsTestSuite) Test_VetoThresholdExceededAndProposa
 
 	suite.Assert().False(passes)
 	suite.Assert().Equal(burnDeposits, suite.govParams.BurnVoteVeto)
-	printTallyResultsToConsole(tallyResults)
 	suite.Assert().Equal("5", tallyResults.GetYesCount())
 	suite.Assert().Equal("5", tallyResults.GetNoWithVetoCount())
 }

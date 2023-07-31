@@ -29,6 +29,7 @@ func areAllOptionsZeroDec(options map[govtypes_v1.VoteOption]math.LegacyDec) boo
 	return true
 }
 
+// isOnlyOneOptionSelected returns true if the voteOptions map contains only one option
 func isOnlyOneOptionSelected(voteOptions voteOptions, option govtypes_v1.VoteOption) bool {
 	// First make sure all the other options are zero
 	for vote, voteValue := range voteOptions {
@@ -43,14 +44,7 @@ func isOnlyOneOptionSelected(voteOptions voteOptions, option govtypes_v1.VoteOpt
 	return voteOptions[option].Equal(math.NewInt(1))
 }
 
-func isOptionValueEqualTo(options map[govtypes_v1.VoteOption]math.LegacyDec, option govtypes_v1.VoteOption, value math.LegacyDec) bool {
-	return options[option].Equal(value)
-}
-
-func isOptionValueZero(options map[govtypes_v1.VoteOption]math.LegacyDec, option govtypes_v1.VoteOption) bool {
-	return options[option].IsZero()
-}
-
+// createMember creates a member with the given address
 func createMember(address string) *types.Member {
 	baseAccount := authtypes.NewBaseAccountWithAddress(sdk.AccAddress(address))
 	member := types.NewMemberAccountWithDefaultMemberStatus(
@@ -60,6 +54,7 @@ func createMember(address string) *types.Member {
 	return member
 }
 
+// mustCreateProposal creates a proposal and expects no errors
 func mustCreateProposal(proposalId uint64, proposor string) *govtypes_v1.Proposal {
 	member := createMember(proposor)
 	// Time must be 30 seconds in the future
@@ -79,16 +74,19 @@ func mustCreateProposal(proposalId uint64, proposor string) *govtypes_v1.Proposa
 	return &proposal
 }
 
+// addVote adds a vote to the vote options
 func addVote(voteOptions voteOptions, option govtypes_v1.VoteOption) {
 	voteOptions[option] = voteOptions[option].Add(sdk.NewInt(1))
 }
 
+// printVoteOptionsToConsole prints the vote options to the console
 func printVoteOptionsToConsole(results voteOptions) {
 	for option, value := range results {
 		println(option.String(), value.String())
 	}
 }
 
+// printTallyResultsToConsole prints the tally results to the console
 func printTallyResultsToConsole(results govtypes_v1.TallyResult) {
 	println("Yes", results.GetYesCount())
 	println("Abstain", results.GetAbstainCount())
