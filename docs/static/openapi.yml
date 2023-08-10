@@ -53585,18 +53585,6 @@ paths:
               params:
                 description: params holds all the parameters of this module.
                 type: object
-                properties:
-                  guardians:
-                    type: string
-                    title: >-
-                      List of wallets, called Guardians, who can wield majority
-                      over every proposal
-                  total_voting_weight:
-                    type: string
-                    format: byte
-                    title: >-
-                      Total voting weight percentage available to the Guardians,
-                      divided equally among them
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -84417,18 +84405,6 @@ definitions:
     type: object
   membershipmodule.membership.Params:
     type: object
-    properties:
-      guardians:
-        type: string
-        title: >-
-          List of wallets, called Guardians, who can wield majority over every
-          proposal
-      total_voting_weight:
-        type: string
-        format: byte
-        title: >-
-          Total voting weight percentage available to the Guardians, divided
-          equally among them
     description: Params defines the parameters for the module.
   membershipmodule.membership.QueryGuardiansResponse:
     type: object
@@ -85147,16 +85123,4 @@ definitions:
       params:
         description: params holds all the parameters of this module.
         type: object
-        properties:
-          guardians:
-            type: string
-            title: >-
-              List of wallets, called Guardians, who can wield majority over
-              every proposal
-          total_voting_weight:
-            type: string
-            format: byte
-            title: >-
-              Total voting weight percentage available to the Guardians, divided
-              equally among them
     description: QueryParamsResponse is response type for the Query/Params RPC method.

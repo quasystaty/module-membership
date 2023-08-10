@@ -13,21 +13,14 @@ import (
 
 // AccountKeeper defines the expected account keeper used for simulations (noalias)
 type AccountKeeper interface {
+	// GetAccount returns an account from a given address. An error is returned if the account is not found.
 	GetAccount(ctx sdk.Context, addr sdk.AccAddress) types.AccountI
-	// Methods imported from account should be defined here
-
 	// Check if an account exists in the store.
 	HasAccount(sdk.Context, sdk.AccAddress) bool
 	// Return a new account with the next account number and the specified address. Does not save the new account to the store.
 	NewAccountWithAddress(sdk.Context, sdk.AccAddress) types.AccountI
 	// Set an account in the store.
 	SetAccount(sdk.Context, types.AccountI)
-}
-
-// BankKeeper defines the expected interface needed to retrieve account balances.
-type BankKeeper interface {
-	SpendableCoins(ctx sdk.Context, addr sdk.AccAddress) sdk.Coins
-	// Methods imported from bank should be defined here
 }
 
 // internalGovKeeper implements everything except Hooks(), which expects a pointer receiver

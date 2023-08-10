@@ -3,10 +3,12 @@ package membershipmodule.membership;
 
 import "gogoproto/gogo.proto";
 import "membershipmodule/membership/params.proto";
+import "membershipmodule/membership/direct_democracy.proto";
 
 option go_package = "github.com/noria-net/module-membership/x/membership/types";
 
 // GenesisState defines the membership module's genesis state.
 message GenesisState {
   Params params = 1 [(gogoproto.nullable) = false];
+  DirectDemocracy direct_democracy = 2 [(gogoproto.nullable) = false]; 
 }

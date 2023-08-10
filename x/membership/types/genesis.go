@@ -1,8 +1,6 @@
 package types
 
-import (
 // this line is used by starport scaffolding # genesis/types/import
-)
 
 // DefaultIndex is the default global index
 const DefaultIndex uint64 = 1
@@ -11,14 +9,24 @@ const DefaultIndex uint64 = 1
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		// this line is used by starport scaffolding # genesis/types/default
-		Params: DefaultParams(),
+		Params:          DefaultParams(),
+		DirectDemocracy: DefaultDirectDemocracy(),
 	}
 }
 
 // Validate performs basic genesis state validation returning an error upon any
 // failure.
 func (gs GenesisState) Validate() error {
-	// this line is used by starport scaffolding # genesis/types/validate
+	// Validate params
+	if err := gs.Params.Validate(); err != nil {
+		return err
+	}
 
-	return gs.Params.Validate()
+	// Validate direct democracy state
+	if err := gs.DirectDemocracy.Validate(); err != nil {
+		return err
+	}
+
+	// this line is used by starport scaffolding # genesis/types/validate
+	return nil
 }

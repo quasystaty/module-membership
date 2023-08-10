@@ -252,6 +252,7 @@ var (
 		ibcfeetypes.ModuleName:         nil,
 		icatypes.ModuleName:            nil,
 		wasm.ModuleName:                {authtypes.Burner},
+		membershiptypes.ModuleName:     nil,
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
