@@ -18,7 +18,6 @@ func (k Keeper) Members(goCtx context.Context, req *types.QueryMembersRequest) (
 
 	var members types.Members
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	guardians := k.GetGuardianAddresses(ctx)
 	membersStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.MembersKeyPrefix)
 
 	query.Paginate(membersStore, req.Pagination, func(key []byte, value []byte) error {
@@ -26,9 +25,6 @@ func (k Keeper) Members(goCtx context.Context, req *types.QueryMembersRequest) (
 		if err := k.cdc.Unmarshal(value, &member); err != nil {
 			return err
 		}
-
-		// Set Guardian flag
-		member.IsGuardian = member.Status == types.MembershipStatus_MemberElectorate && types.IsGuardianAddressFromBech32(guardians, member.Address)
 
 		members = append(members, &member)
 		return nil

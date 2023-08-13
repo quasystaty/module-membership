@@ -4,7 +4,6 @@ import (
 	"cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/noria-net/module-membership/x/membership/types"
 )
 
@@ -22,8 +21,8 @@ func (k Keeper) GetMemberAccount(ctx sdk.Context, address sdk.AccAddress) (types
 		panic(err)
 	}
 
-	// Get member guardianship status
-	member.IsGuardian = k.IsWhitelistedGuardian(ctx, address) &&
+	// Validate guardianship status
+	member.IsGuardian = member.IsGuardian &&
 		member.Status == types.MembershipStatus_MemberElectorate
 
 	return member, true
@@ -46,6 +45,32 @@ func (k Keeper) AppendMember(ctx sdk.Context, address sdk.AccAddress, newMember 
 
 	// Bump member status count
 	k.SetMemberStatusCount(ctx, newMember.Status, memberStatusCount+1)
+}
+
+func (k Keeper) UpdateMember(ctx sdk.Context, member types.Member) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte{})
+
+	// Parse the address
+	address, _ := sdk.AccAddressFromBech32(member.Address)
+	key := types.MemberKey(address)
+
+	// Fetch old member
+	oldMember, found := k.GetMemberAccount(ctx, address)
+	if !found {
+		panic(errors.Wrapf(types.ErrMemberNotFound, "member not found: %s", address.String()))
+	}
+
+	// Marshal and Set
+	memberData := k.cdc.MustMarshal(&member)
+	store.Set(key, memberData)
+
+	// Update member status count if the status has changed
+	if oldMember.Status != member.Status {
+		// Fetch member counts
+		memberStatusCount := k.GetMemberStatusCount(ctx, oldMember.Status)
+		k.SetMemberStatusCount(ctx, oldMember.Status, memberStatusCount-1)
+		k.SetMemberStatusCount(ctx, member.Status, memberStatusCount+1)
+	}
 }
 
 func (k Keeper) IsMemberByBech32Address(ctx sdk.Context, bech32Address string) bool {
@@ -96,8 +121,8 @@ func (k Keeper) UpdateMemberStatus(ctx sdk.Context, target sdk.AccAddress, s typ
 	member, found := k.GetMemberAccount(ctx, target)
 
 	// Member must exist
-	if !(found) {
-		return errors.Wrapf(sdkerrors.ErrUnauthorized, "member not found: %s", target.String())
+	if !found {
+		return errors.Wrapf(types.ErrMemberNotFound, "member not found: %s", target.String())
 	}
 
 	// Must be a valid status transition

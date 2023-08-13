@@ -43,7 +43,8 @@ func (k Keeper) Tally(ctx sdk.Context, proposal govtypes_v1.Proposal) (passes bo
 	memberPower, guardianPower := calculateVotePower(
 		int64(k.GetMemberStatusCount(ctx, types.MembershipStatus_MemberElectorate)),
 		int64(len(guardians)),
-		k.GetTotalVotingWeight(ctx),
+		math.LegacyZeroDec(),
+		//		k.GetTotalVotingWeight(ctx),
 	)
 
 	k.IterateVotes(ctx, proposal.Id, func(vote govtypes_v1.Vote) (stop bool) {

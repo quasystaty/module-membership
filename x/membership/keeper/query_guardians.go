@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/noria-net/module-membership/x/membership/types"
 	"google.golang.org/grpc/codes"
@@ -17,10 +16,10 @@ func (k Keeper) Guardians(goCtx context.Context, req *types.QueryGuardiansReques
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	guardians := k.GetGuardians(ctx)
-	tw := math.LegacyZeroDec()
+	totalVotingWeight := k.GetDirectDemocracySettings(ctx).TotalVotingWeight
 
 	return &types.QueryGuardiansResponse{
 		Members:           guardians,
-		TotalVotingWeight: &tw,
+		TotalVotingWeight: &totalVotingWeight,
 	}, nil
 }

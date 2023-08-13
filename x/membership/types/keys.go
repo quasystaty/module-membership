@@ -3,7 +3,6 @@ package types
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
-	sdk_address "github.com/cosmos/cosmos-sdk/types/address"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 )
 
@@ -37,19 +36,19 @@ var (
 	MemberStatusKeyPrefix      = []byte{0x02} // prefix for each key to a member filtered by status
 	MemberStatusCountKeyPrefix = []byte{0x03} // prefix for the count of members filtered by status
 	VotesToDeleteKeyPrefix     = []byte{0x04} // prefix for each key to a proposal
-
+	DirectDemocracyKey         = []byte{0x05} // prefix for each key to a proposal
 )
 
 // MembersKey returns the key for the member with the given address
-func MemberKey(address sdk.AccAddress) []byte {
-	return append(MembersKeyPrefix, sdk_address.MustLengthPrefix(address.Bytes())...)
+func MemberKey(addr sdk.AccAddress) []byte {
+	return append(MembersKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
 }
 
 // MemberStatusKey returns the key for the member with the given address and status
-func MemberStatusKey(status MembershipStatus, a sdk.AccAddress) []byte {
+func MemberStatusKey(status MembershipStatus, addr sdk.AccAddress) []byte {
 	// Convert MembershipStatus to byte
 	byteValue := byte(status)
-	return append(MemberStatusKeyPrefix, append([]byte{byteValue}, sdk_address.MustLengthPrefix(a.Bytes())...)...)
+	return append(MemberStatusKeyPrefix, append([]byte{byteValue}, address.MustLengthPrefix(addr.Bytes())...)...)
 }
 
 // MemberStatusCountKey returns the key for the count of members with the given status

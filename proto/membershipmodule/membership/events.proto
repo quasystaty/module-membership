@@ -16,3 +16,13 @@ message EventMemberStatusChanged {
   MembershipStatus previous_status = 3;
   string operator = 4;
 }
+
+// EventMemberGrantedGuardianship is an event emitted when a member's guardianship status is granted
+message EventMemberGrantedGuardianship {
+  string member_address = 1;
+}
+
+// EventMemberRevokedGuardianship is an event emitted when a member's guardianship status is revoked
+message EventMemberRevokedGuardianship {
+  string member_address = 1;
+}
