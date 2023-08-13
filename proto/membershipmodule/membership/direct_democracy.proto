@@ -9,7 +9,7 @@ import "gogoproto/gogo.proto";
 message DirectDemocracy {
 
   // Total voting weight percentage available to the Guardians, divided equally among them
-  bytes totalVotingWeight = 1 [
+  bytes total_voting_weight = 1 [
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable)   = false,
     (gogoproto.jsontag)    = "total_voting_weight,omitempty",

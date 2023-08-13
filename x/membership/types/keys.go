@@ -32,11 +32,21 @@ const (
 // - 0x03<memberStatus (1 Byte)>: Status-Filtered Member Count
 var (
 	MembersKeyPrefix           = []byte{0x00} // prefix for each key to a member
-	MemberCountKey             = []byte{0x01} // prefix for the count of members
+	MemberCountKey             = []byte{0x01} // key for the member count
 	MemberStatusKeyPrefix      = []byte{0x02} // prefix for each key to a member filtered by status
 	MemberStatusCountKeyPrefix = []byte{0x03} // prefix for the count of members filtered by status
-	VotesToDeleteKeyPrefix     = []byte{0x04} // prefix for each key to a proposal
-	DirectDemocracyKey         = []byte{0x05} // prefix for each key to a proposal
+	VotesToDeleteKeyPrefix     = []byte{0x04} // prefix for each key to a vote
+	DirectDemocracyKey         = []byte{0x05} // key for the Direct Democracy settings
+
+	// Add keys here so that we can check for duplicate values in a unit test
+	AllKeys = [][]byte{
+		MembersKeyPrefix,
+		MemberCountKey,
+		MemberStatusKeyPrefix,
+		MemberStatusCountKeyPrefix,
+		VotesToDeleteKeyPrefix,
+		DirectDemocracyKey,
+	}
 )
 
 // MembersKey returns the key for the member with the given address

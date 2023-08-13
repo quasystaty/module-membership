@@ -75,9 +75,9 @@ genesis:
         threshold: "0.000001"
         veto_threshold: "0.334"
     membership:
-      params:
+      direct_democracy:
+        guardians:
         total_voting_weight: "0.51"
-        guardians: "mm1e7gp56hf85nk0qtg0542gmmmwq753ww2tg7dws"
     mint:
       minter:
         annual_provisions: "0.0"
