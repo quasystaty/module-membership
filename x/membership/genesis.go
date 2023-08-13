@@ -10,6 +10,17 @@ import (
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	k.SetDirectDemocracySettings(ctx, &genState.DirectDemocracy)
 
+	// Enroll and add guardians
+	for _, address := range genState.DirectDemocracy.Guardians {
+		guardian := sdk.MustAccAddressFromBech32(address)
+		if !k.IsMember(ctx, guardian) {
+			k.AppendMember(ctx, guardian)
+		}
+		if !k.IsGuardian(ctx, guardian) {
+			k.SetMemberGuardianStatus(ctx, guardian, true)
+		}
+	}
+
 	// this line is used by starport scaffolding # genesis/module/init
 	k.SetParams(ctx, genState.Params)
 }

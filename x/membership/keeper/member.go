@@ -4,6 +4,8 @@ import (
 	"cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/noria-net/module-membership/x/membership/types"
 )
 
@@ -28,16 +30,39 @@ func (k Keeper) GetMemberAccount(ctx sdk.Context, address sdk.AccAddress) (types
 	return member, true
 }
 
-func (k Keeper) AppendMember(ctx sdk.Context, address sdk.AccAddress, newMember types.Member) {
+func (k Keeper) AppendMember(ctx sdk.Context, address sdk.AccAddress) error {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte{})
 	key := types.MemberKey(address)
+
+	// Must not already have a member account
+	if k.IsMember(ctx, address) {
+		return errors.Wrap(sdkerrors.ErrUnauthorized, "account has already been enrolled")
+	}
+
+	// Get or create a base account
+	var baseAccount = k.accountKeeper.GetAccount(ctx, address)
+	if baseAccount == nil {
+		// Create a base baseAccount
+		baseAccount = k.accountKeeper.NewAccountWithAddress(ctx, address)
+		// Ensure account type is correct
+		if _, ok := baseAccount.(*authtypes.BaseAccount); !ok {
+			return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid account type; expected: BaseAccount, got: %T", baseAccount)
+		}
+		// Save the base account
+		k.accountKeeper.SetAccount(ctx, baseAccount)
+	}
+
+	// Create a member account
+	newMember := types.NewMemberAccountWithDefaultMemberStatus(
+		baseAccount.(*authtypes.BaseAccount),
+	)
 
 	// Fetch member counts
 	memberCount := k.GetMemberCount(ctx)
 	memberStatusCount := k.GetMemberStatusCount(ctx, newMember.Status)
 
 	// Marshal and Set
-	memberData := k.cdc.MustMarshal(&newMember)
+	memberData := k.cdc.MustMarshal(newMember)
 	store.Set(key, memberData)
 
 	// Bump member count
@@ -45,6 +70,8 @@ func (k Keeper) AppendMember(ctx sdk.Context, address sdk.AccAddress, newMember 
 
 	// Bump member status count
 	k.SetMemberStatusCount(ctx, newMember.Status, memberStatusCount+1)
+
+	return nil
 }
 
 func (k Keeper) UpdateMember(ctx sdk.Context, member types.Member) {
@@ -71,6 +98,26 @@ func (k Keeper) UpdateMember(ctx sdk.Context, member types.Member) {
 		k.SetMemberStatusCount(ctx, oldMember.Status, memberStatusCount-1)
 		k.SetMemberStatusCount(ctx, member.Status, memberStatusCount+1)
 	}
+}
+
+// SetMemberNickname sets the nickname of a member
+// NOTE: Assumes the member exists
+func (k Keeper) SetMemberNickname(ctx sdk.Context, address sdk.AccAddress, nickname string) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte{})
+	key := types.MemberMetadataKey(address, types.MemberMetadata_Nickname)
+	store.Set(key, []byte(nickname))
+}
+
+// GetMemberNickname gets the nickname of a member
+func (k Keeper) GetMemberNickname(ctx sdk.Context, address sdk.AccAddress) string {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte{})
+	key := types.MemberMetadataKey(address, types.MemberMetadata_Nickname)
+	bz := store.Get(key)
+	if bz == nil {
+		return ""
+	}
+
+	return string(bz)
 }
 
 func (k Keeper) IsMemberByBech32Address(ctx sdk.Context, bech32Address string) bool {

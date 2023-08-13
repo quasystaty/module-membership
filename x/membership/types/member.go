@@ -11,6 +11,7 @@ import (
 const NicknameMaxLength = 30
 
 const MembershipStatusPrefix = "MEMBERSHIP_STATUS_"
+const MemberMetadata_Nickname = "nickname"
 
 // Members is a collection of Member objects
 type Members []*Member
@@ -25,11 +26,10 @@ var AllowedMembershipStatusTransitions = map[MembershipStatus][]MembershipStatus
 
 // NewMemberAccountWithDefaultMemberStatus creats a new member account with a
 // default member status of Electorate.
-func NewMemberAccountWithDefaultMemberStatus(baseAccount *authtypes.BaseAccount, nickname string) *Member {
+func NewMemberAccountWithDefaultMemberStatus(baseAccount *authtypes.BaseAccount) *Member {
 	acc := &Member{
 		BaseAccount: baseAccount,
 		Status:      MembershipStatus_MemberElectorate,
-		Nickname:    nickname,
 	}
 	return acc
 }

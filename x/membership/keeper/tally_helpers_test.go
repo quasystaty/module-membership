@@ -49,7 +49,6 @@ func createMember(address string) *types.Member {
 	baseAccount := authtypes.NewBaseAccountWithAddress(sdk.AccAddress(address))
 	member := types.NewMemberAccountWithDefaultMemberStatus(
 		baseAccount,
-		"address_1",
 	)
 	return member
 }

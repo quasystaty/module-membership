@@ -77,6 +77,7 @@ genesis:
     membership:
       direct_democracy:
         guardians:
+        - mm16rcnqanqy8e99lnzus9tgs8qug6l9r0q9l9vvn
         total_voting_weight: "0.51"
     mint:
       minter:

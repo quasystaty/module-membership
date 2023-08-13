@@ -35,8 +35,9 @@ var (
 	MemberCountKey             = []byte{0x01} // key for the member count
 	MemberStatusKeyPrefix      = []byte{0x02} // prefix for each key to a member filtered by status
 	MemberStatusCountKeyPrefix = []byte{0x03} // prefix for the count of members filtered by status
-	VotesToDeleteKeyPrefix     = []byte{0x04} // prefix for each key to a vote
-	DirectDemocracyKey         = []byte{0x05} // key for the Direct Democracy settings
+	MemberMetadataKeyPrefix    = []byte{0x04} // prefix for each key to a member's metadata
+	VotesToDeleteKeyPrefix     = []byte{0x05} // prefix for each key to a vote
+	DirectDemocracyKey         = []byte{0x06} // key for the Direct Democracy settings
 
 	// Add keys here so that we can check for duplicate values in a unit test
 	AllKeys = [][]byte{
@@ -44,6 +45,7 @@ var (
 		MemberCountKey,
 		MemberStatusKeyPrefix,
 		MemberStatusCountKeyPrefix,
+		MemberMetadataKeyPrefix,
 		VotesToDeleteKeyPrefix,
 		DirectDemocracyKey,
 	}
@@ -66,6 +68,11 @@ func MemberStatusCountKey(status MembershipStatus) []byte {
 	// Convert MembershipStatus to byte
 	byteValue := byte(status)
 	return append(MemberStatusCountKeyPrefix, []byte{byteValue}...)
+}
+
+// MemberMetadataKey returns the key for the metadata of the member with the given address and name
+func MemberMetadataKey(addr sdk.AccAddress, name string) []byte {
+	return append(MemberMetadataKeyPrefix, append(address.MustLengthPrefix(addr.Bytes()), []byte(name)...)...)
 }
 
 // VotesToDeleteKey returns the key for the votes of the proposal with the given ID

@@ -22,29 +22,14 @@ func (k Keeper) SetMemberGuardianStatus(ctx sdk.Context, addr sdk.AccAddress, is
 	member.IsGuardian = isGuardian
 	k.UpdateMember(ctx, member)
 
-	// Update the Direct Democracy guardian whitelist
-	dd := k.GetDirectDemocracySettings(ctx)
-
+	// Publish an event for this change
 	if isGuardian {
-
-		dd.Guardians = append(dd.Guardians, addr.String())
-
-		// Publish an event
 		ctx.EventManager().EmitTypedEvent(
 			&types.EventMemberGrantedGuardianship{
 				MemberAddress: addr.String(),
 			},
 		)
 	} else {
-
-		// Remove the guardian key from dd.Guardians
-		for i, guardian := range dd.Guardians {
-			if guardian == addr.String() {
-				dd.Guardians = append(dd.Guardians[:i], dd.Guardians[i+1:]...)
-				break
-			}
-		}
-
 		// Publish an event
 		ctx.EventManager().EmitTypedEvent(
 			&types.EventMemberRevokedGuardianship{
@@ -52,8 +37,6 @@ func (k Keeper) SetMemberGuardianStatus(ctx sdk.Context, addr sdk.AccAddress, is
 			},
 		)
 	}
-
-	k.SetDirectDemocracySettings(ctx, dd)
 
 	return nil
 }
@@ -81,6 +64,28 @@ func (k Keeper) GetGuardians(ctx sdk.Context) (guardians []*types.Member) {
 	}
 
 	return guardians
+}
+
+func (k Keeper) IsGuardian(ctx sdk.Context, addr sdk.AccAddress) bool {
+	dd := k.GetDirectDemocracySettings(ctx)
+
+	for _, guardianAddress := range dd.Guardians {
+
+		// Unmarshal the address and panic if there's an error
+		// NOTE: The key is prefixed with the guardian key prefix
+		// so we need to remove it before unmarshalling
+		acc := sdk.MustAccAddressFromBech32(guardianAddress)
+
+		if acc.Equals(addr) {
+			// Get the member
+			member, found := k.GetMemberAccount(ctx, acc)
+			// Guardian must be a member with a status of MemberElectorate
+			return found &&
+				member.IsGuardian &&
+				member.Status == types.MembershipStatus_MemberElectorate
+		}
+	}
+	return false
 }
 
 func (k Keeper) GetDirectDemocracySettings(ctx sdk.Context) *types.DirectDemocracy {

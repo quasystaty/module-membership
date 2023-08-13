@@ -30,12 +30,15 @@ func (k Keeper) Member(goCtx context.Context, req *types.QueryMemberRequest) (*t
 		return nil, errors.Wrap(sdkerrors.ErrUnknownAddress, "member not found")
 	}
 
+	// Get the member's nickname
+	nickname := k.GetMemberNickname(ctx, accAddress)
+
 	// Return memberAccount inside the response
 	return &types.QueryMemberResponse{
 		Member: &types.Member{
 			BaseAccount: memberAccount.BaseAccount,
 			Status:      memberAccount.Status,
-			Nickname:    memberAccount.Nickname,
+			Nickname:    nickname,
 		},
 	}, nil
 }
