@@ -22,7 +22,8 @@ func (k msgServer) Enroll(goCtx context.Context, msg *types.MsgEnroll) (*types.M
 	}
 
 	// Save it to the store
-	err := k.AppendMember(ctx, enrollee); if err != nil {
+	err := k.AppendMember(ctx, enrollee)
+	if err != nil {
 		return nil, err
 	}
 
