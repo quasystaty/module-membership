@@ -84401,6 +84401,8 @@ definitions:
       Denom
   membershipmodule.membership.MsgEnrollResponse:
     type: object
+  membershipmodule.membership.MsgUpdateDirectDemocracyResponse:
+    type: object
   membershipmodule.membership.MsgUpdateStatusResponse:
     type: object
   membershipmodule.membership.Params:

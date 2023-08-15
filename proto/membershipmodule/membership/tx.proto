@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package membershipmodule.membership;
 
+import "gogoproto/gogo.proto";
 import "membershipmodule/membership/member.proto";
 
 option go_package = "github.com/noria-net/module-membership/x/membership/types";
@@ -10,6 +11,7 @@ option go_package = "github.com/noria-net/module-membership/x/membership/types";
 service Msg {
   rpc Enroll       (MsgEnroll      ) returns (MsgEnrollResponse      );
   rpc UpdateStatus (MsgUpdateStatus) returns (MsgUpdateStatusResponse);
+  rpc UpdateDirectDemocracy (MsgUpdateDirectDemocracy) returns (MsgUpdateDirectDemocracyResponse);
 }
 message MsgEnroll {
   string creator  = 1;
@@ -25,4 +27,16 @@ message MsgUpdateStatus {
 }
 
 message MsgUpdateStatusResponse {}
+
+message MsgUpdateDirectDemocracy {
+           string creator           = 1;
+  repeated string add_guardians      = 2 [(gogoproto.nullable) = true];
+  repeated string remove_guardians   = 3 [(gogoproto.nullable) = true];
+           string total_voting_weight = 4 [
+              (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+              (gogoproto.nullable) = true
+            ];
+}
+
+message MsgUpdateDirectDemocracyResponse {}
 
