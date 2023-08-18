@@ -22,7 +22,7 @@ const (
 	FlagTotalVotingWeight = "total-voting-weight"
 )
 
-func CmdUpdateDirectDemocracy() *cobra.Command {
+func NewSubmitUpdateDirectDemocracyProposalCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update-direct-democracy",
 		Short: "Submit a proposal to update the Direct Democracy settings",

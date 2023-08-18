@@ -1,23 +1,23 @@
-syntax="proto3";
+syntax = "proto3";
 package membershipmodule.membership;
+
+import "gogoproto/gogo.proto";
+import "membershipmodule/membership/member.proto";
 
 option go_package = "github.com/noria-net/module-membership/x/membership/types";
 
-import "membershipmodule/membership/member.proto";
-import "gogoproto/gogo.proto";
-
+// DirectDemocracy holds the list of guardians and the total voting weight percentage available to them
 message DirectDemocracy {
-
   // Total voting weight percentage available to the Guardians, divided equally among them
   bytes total_voting_weight = 1 [
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-    (gogoproto.nullable)   = false,
-    (gogoproto.jsontag)    = "total_voting_weight,omitempty"
+    (gogoproto.nullable) = false,
+    (gogoproto.jsontag) = "total_voting_weight,omitempty"
   ];
 
   // Guardians is the list of members who have elevated democratic privileges
   repeated string guardians = 2 [
     (gogoproto.nullable) = false,
-    (gogoproto.jsontag)  = "guardians,omitempty"
+    (gogoproto.jsontag) = "guardians,omitempty"
   ];
 }

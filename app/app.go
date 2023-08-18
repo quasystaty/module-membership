@@ -127,6 +127,7 @@ import (
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	membership "github.com/noria-net/module-membership/x/membership"
+	membershipclient "github.com/noria-net/module-membership/x/membership/client"
 	membershipkeeper "github.com/noria-net/module-membership/x/membership/keeper"
 	membershiptypes "github.com/noria-net/module-membership/x/membership/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
@@ -198,6 +199,7 @@ func getGovProposalHandlers() []govclient.ProposalHandler {
 		upgradeclient.LegacyCancelProposalHandler,
 		ibcclientclient.UpdateClientProposalHandler,
 		ibcclientclient.UpgradeProposalHandler,
+		membershipclient.UpdateDirectDemocracyProposalHandler,
 		// this line is used by starport scaffolding # stargate/app/govProposalHandler
 	)
 

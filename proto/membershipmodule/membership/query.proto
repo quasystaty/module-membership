@@ -2,55 +2,52 @@ syntax = "proto3";
 
 package membershipmodule.membership;
 
+import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
-import "membershipmodule/membership/params.proto";
 import "membershipmodule/membership/member.proto";
+import "membershipmodule/membership/params.proto";
 
 option go_package = "github.com/noria-net/module-membership/x/membership/types";
 
 // Query defines the gRPC querier service.
 service Query {
-  
   // Parameters queries the parameters of the module.
-  rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/noria-net/module-membership/membership/params";
-  
   }
-  
+
   // Queries a Member using their wallet address
-  rpc Member (QueryMemberRequest) returns (QueryMemberResponse) {
+  rpc Member(QueryMemberRequest) returns (QueryMemberResponse) {
     option (google.api.http).get = "/noria-net/module-membership/membership/member/{address}";
-  
   }
-  
+
   // Queries a list of Members items.
-  rpc Members (QueryMembersRequest) returns (QueryMembersResponse) {
+  rpc Members(QueryMembersRequest) returns (QueryMembersResponse) {
     option (google.api.http).get = "/noria-net/module-membership/membership/members";
-  
   }
-  
+
   // Queries a list of Guardians items.
-  rpc Guardians (QueryGuardiansRequest) returns (QueryGuardiansResponse) {
+  rpc Guardians(QueryGuardiansRequest) returns (QueryGuardiansResponse) {
     option (google.api.http).get = "/noria-net/module-membership/membership/guardians";
-  
   }
 }
+
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
 
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
-  
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
 }
 
+// QueryMemberRequest specifies the member to query.
 message QueryMemberRequest {
   string address = 1;
 }
 
+// QueryMemberResponse contains the member details.
 message QueryMemberResponse {
   Member member = 1;
 }
@@ -60,8 +57,8 @@ message QueryMembersRequest {
 }
 
 message QueryMembersResponse {
-  repeated Member                                 members    = 1 [(gogoproto.nullable) = true];
-           cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  repeated Member members = 1 [(gogoproto.nullable) = true];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 message QueryGuardiansRequest {}
@@ -74,4 +71,3 @@ message QueryGuardiansResponse {
     (gogoproto.jsontag) = "total_voting_weight"
   ];
 }
-

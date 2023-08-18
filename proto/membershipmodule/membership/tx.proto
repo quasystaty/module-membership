@@ -9,34 +9,43 @@ option go_package = "github.com/noria-net/module-membership/x/membership/types";
 
 // Msg defines the Msg service.
 service Msg {
-  rpc Enroll       (MsgEnroll      ) returns (MsgEnrollResponse      );
-  rpc UpdateStatus (MsgUpdateStatus) returns (MsgUpdateStatusResponse);
-  rpc UpdateDirectDemocracy (MsgUpdateDirectDemocracy) returns (MsgUpdateDirectDemocracyResponse);
+  // Enroll creates a new membership enrollment
+  rpc Enroll(MsgEnroll) returns (MsgEnrollResponse);
+  // UpdateStatus updates a member's electorate status
+  rpc UpdateStatus(MsgUpdateStatus) returns (MsgUpdateStatusResponse);
+  // UpdateDirectDemocracy submits a proposal to update the guardians and/or total voting weight
+  rpc UpdateDirectDemocracy(MsgUpdateDirectDemocracy) returns (MsgUpdateDirectDemocracyResponse);
 }
+
+// MsgEnroll provides details for a new membership enrollment.
 message MsgEnroll {
-  string creator  = 1;
+  string creator = 1;
   string nickname = 3;
 }
 
+// MsgEnrollResponse is an empty response
 message MsgEnrollResponse {}
 
+// MsgUpdateStatus updates a member's electorate status
 message MsgUpdateStatus {
   string creator = 1;
   string address = 2;
-  MembershipStatus status  = 3;
+  MembershipStatus status = 3;
 }
 
+// MsgUpdateStatusResponse is an empty response
 message MsgUpdateStatusResponse {}
 
+// MsgUpdateDirectDemocracy submits a proposal to update the guardians and/or total voting weight
 message MsgUpdateDirectDemocracy {
-           string creator           = 1;
-  repeated string add_guardians      = 2 [(gogoproto.nullable) = true];
-  repeated string remove_guardians   = 3 [(gogoproto.nullable) = true];
-           string total_voting_weight = 4 [
-              (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
-              (gogoproto.nullable) = true
-            ];
+  string creator = 1;
+  repeated string add_guardians = 2 [(gogoproto.nullable) = true];
+  repeated string remove_guardians = 3 [(gogoproto.nullable) = true];
+  string total_voting_weight = 4 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = true
+  ];
 }
 
+// MsgUpdateDirectDemocracyResponse is an empty response
 message MsgUpdateDirectDemocracyResponse {}
-
