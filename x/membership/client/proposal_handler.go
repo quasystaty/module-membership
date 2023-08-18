@@ -6,5 +6,5 @@ import (
 )
 
 var (
-	UpdateDirectDemocracyProposalHandler = govclient.NewProposalHandler(cli.NewSubmitUpdateDirectDemocracyProposalCmd)
+	UpdateDirectDemocracyProposalHandler = govclient.NewProposalHandler(cli.NewSubmitDirectDemocracyUpdateProposalCmd)
 )

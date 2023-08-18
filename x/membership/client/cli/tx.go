@@ -32,7 +32,7 @@ func GetTxCmd() *cobra.Command {
 
 	cmd.AddCommand(CmdEnroll())
 	cmd.AddCommand(CmdUpdateStatus())
-	cmd.AddCommand(NewSubmitUpdateDirectDemocracyProposalCmd())
+	cmd.AddCommand(NewSubmitDirectDemocracyUpdateProposalCmd())
 	// this line is used by starport scaffolding # 1
 
 	return cmd

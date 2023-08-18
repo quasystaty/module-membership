@@ -10,6 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/cosmos/cosmos-sdk/version"
+	"github.com/noria-net/module-membership/x/membership/client/utils"
 	"github.com/noria-net/module-membership/x/membership/types"
 	"github.com/spf13/cobra"
 )
@@ -22,7 +23,7 @@ const (
 	FlagTotalVotingWeight = "total-voting-weight"
 )
 
-func NewSubmitUpdateDirectDemocracyProposalCmd() *cobra.Command {
+func NewSubmitDirectDemocracyUpdateProposalCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update-direct-democracy",
 		Short: "Submit a proposal to update the Direct Democracy settings",
@@ -31,24 +32,61 @@ func NewSubmitUpdateDirectDemocracyProposalCmd() *cobra.Command {
 or to update the total voting weight of the electorate. The proposal will be put to a governance vote
 and only applied if it succeeds.
 
-NOTE: At least one change must be submitted using the flags below. Updates may be combined by using multiple flags.
+The format of the proposal json JSON is as follows:
+{
+	  "title": "<title>",
+	  "description": "<description>",
+	  "guardians_to_add": [
+		"<guardian_address>"
+	  ],
+	  "guardians_to_remove": [
+		"<guardian_address>"
+	  ],
+	  "total_voting_weight": "<total_voting_weight>"	
+}
+
+NOTE: There must be at least one guardian to add or remove, or there must be a total voting weight to update.
+Otherwise the command will be rejected because there is no work to do.
+
+NOTE: The total voting weight must be a decimal value between 0 and 1, inlcusive.
 
 Example - Adding a guardian:
-$ %s tx membership update-direct-democracy --add-guardians=<new_guardian> --from=<key_or_address>
+$ %s tx membership update-direct-democracy <path/to/proposal.json> --from=<key_or_address>
 
-Example - Removing a guardian:
-$ %s tx membership update-direct-democracy --remove-guardians=<guardian_to_remove> --from=<key_or_address>
+where proposal.json contains:
+{
+	  "title": "Add guardian",
+	  "description": "Add guardian to the electorate",
+	  guardians_to_add: [
+		"cosmos1..."
+	  ]
+}
 
 Example - Updating the total voting weight:
-$ %s tx membership update-direct-democracy --total-voting-weight=1000 --from=<key_or_address>
+$ %s tx membership update-direct-democracy <path/to/proposal.json> --from=<key_or_address>
+
+where proposal.json contains:
+{
+	  "title": "Update total voting weight",
+	  "description": "Update the total voting weight of the electorate",
+	  "total_voting_weight": "0.51
+}
 
 `,
 				version.AppName,
 				version.AppName,
-				version.AppName,
 			)),
-		Args: cobra.ExactArgs(0),
+		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
+
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			// Parse the proposal
+			proposal, err := utils.ParseDirectDemocracyUpdateProposal(clientCtx.Codec, args[0])
+
 			addGuardians, err := cmd.Flags().GetStringArray(FlagAddGuardians)
 			if err != nil {
 				return err
@@ -60,11 +98,6 @@ $ %s tx membership update-direct-democracy --total-voting-weight=1000 --from=<ke
 			}
 
 			totalVotingWeight, err := cmd.Flags().GetString(FlagTotalVotingWeight)
-			if err != nil {
-				return err
-			}
-
-			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}

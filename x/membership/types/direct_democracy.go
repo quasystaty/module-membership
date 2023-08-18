@@ -7,6 +7,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+const (
+	MINIMUM_TOTAL_VOTING_WEIGHT = "0"
+	MAXIMUM_TOTAL_VOTING_WEIGHT = "1"
+)
+
 // DirectDemocracy is the struct that contains the direct democracy state
 func DefaultDirectDemocracy() DirectDemocracy {
 	return DirectDemocracy{
