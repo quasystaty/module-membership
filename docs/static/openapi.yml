@@ -52412,30 +52412,28 @@ paths:
 
                         type for additional functionality (e.g. vesting).
                     status:
+                      title: status defines the membership status of this member
                       type: string
                       enum:
-                        - MEMBERSHIP_STATUS_UNDEFINED
+                        - MEMBERSHIP_STATUS_UNSPECIFIED
                         - MEMBERSHIP_STATUS_ELECTORATE
                         - MEMBERSHIP_STATUS_INACTIVE
                         - MEMBERSHIP_STATUS_RECALLED
                         - MEMBERSHIP_STATUS_EXPULSED
-                      default: MEMBERSHIP_STATUS_UNDEFINED
+                      default: MEMBERSHIP_STATUS_UNSPECIFIED
                       description: >-
-                        - MEMBERSHIP_STATUS_UNDEFINED:
-                        MEMBERSHIP_STATUS_UNDEFINED defines a no-op status
+                        - MEMBERSHIP_STATUS_UNSPECIFIED:
+                        MEMBERSHIP_STATUS_UNSPECIFIED defines a no-op status
                          - MEMBERSHIP_STATUS_ELECTORATE: MEMBERSHIP_STATUS_ELECTORATE defines this member as being an active citizen
                          - MEMBERSHIP_STATUS_INACTIVE: MEMBERSHIP_STATUS_INACTIVE defines this member as being an inactive citizen
                          - MEMBERSHIP_STATUS_RECALLED: MEMBERSHIP_STATUS_RECALLED defines this member as being recalled
                          - MEMBERSHIP_STATUS_EXPULSED: MEMBERSHIP_STATUS_EXPULSED defines this member as being expulsed
-                      title: >-
-                        MembershipStatus enumerates the valid membership states
-                        for a citizen of The
-
-                        Denom
                     nickname:
                       type: string
+                      title: nickname defines the nickname of this member
                     is_guardian:
                       type: boolean
+                      title: is_guardian defines whether this member is a guardian
                   title: >-
                     Member is a specialisation of BaseAccount that adds Member
                     Status and
@@ -52839,35 +52837,34 @@ paths:
 
                       type for additional functionality (e.g. vesting).
                   status:
+                    title: status defines the membership status of this member
                     type: string
                     enum:
-                      - MEMBERSHIP_STATUS_UNDEFINED
+                      - MEMBERSHIP_STATUS_UNSPECIFIED
                       - MEMBERSHIP_STATUS_ELECTORATE
                       - MEMBERSHIP_STATUS_INACTIVE
                       - MEMBERSHIP_STATUS_RECALLED
                       - MEMBERSHIP_STATUS_EXPULSED
-                    default: MEMBERSHIP_STATUS_UNDEFINED
+                    default: MEMBERSHIP_STATUS_UNSPECIFIED
                     description: >-
-                      - MEMBERSHIP_STATUS_UNDEFINED: MEMBERSHIP_STATUS_UNDEFINED
-                      defines a no-op status
+                      - MEMBERSHIP_STATUS_UNSPECIFIED:
+                      MEMBERSHIP_STATUS_UNSPECIFIED defines a no-op status
                        - MEMBERSHIP_STATUS_ELECTORATE: MEMBERSHIP_STATUS_ELECTORATE defines this member as being an active citizen
                        - MEMBERSHIP_STATUS_INACTIVE: MEMBERSHIP_STATUS_INACTIVE defines this member as being an inactive citizen
                        - MEMBERSHIP_STATUS_RECALLED: MEMBERSHIP_STATUS_RECALLED defines this member as being recalled
                        - MEMBERSHIP_STATUS_EXPULSED: MEMBERSHIP_STATUS_EXPULSED defines this member as being expulsed
-                    title: >-
-                      MembershipStatus enumerates the valid membership states
-                      for a citizen of The
-
-                      Denom
                   nickname:
                     type: string
+                    title: nickname defines the nickname of this member
                   is_guardian:
                     type: boolean
+                    title: is_guardian defines whether this member is a guardian
                 title: >-
                   Member is a specialisation of BaseAccount that adds Member
                   Status and
 
                   Nickname
+            description: QueryMemberResponse contains the member details.
         default:
           description: An unexpected error response.
           schema:
@@ -53271,30 +53268,28 @@ paths:
 
                         type for additional functionality (e.g. vesting).
                     status:
+                      title: status defines the membership status of this member
                       type: string
                       enum:
-                        - MEMBERSHIP_STATUS_UNDEFINED
+                        - MEMBERSHIP_STATUS_UNSPECIFIED
                         - MEMBERSHIP_STATUS_ELECTORATE
                         - MEMBERSHIP_STATUS_INACTIVE
                         - MEMBERSHIP_STATUS_RECALLED
                         - MEMBERSHIP_STATUS_EXPULSED
-                      default: MEMBERSHIP_STATUS_UNDEFINED
+                      default: MEMBERSHIP_STATUS_UNSPECIFIED
                       description: >-
-                        - MEMBERSHIP_STATUS_UNDEFINED:
-                        MEMBERSHIP_STATUS_UNDEFINED defines a no-op status
+                        - MEMBERSHIP_STATUS_UNSPECIFIED:
+                        MEMBERSHIP_STATUS_UNSPECIFIED defines a no-op status
                          - MEMBERSHIP_STATUS_ELECTORATE: MEMBERSHIP_STATUS_ELECTORATE defines this member as being an active citizen
                          - MEMBERSHIP_STATUS_INACTIVE: MEMBERSHIP_STATUS_INACTIVE defines this member as being an inactive citizen
                          - MEMBERSHIP_STATUS_RECALLED: MEMBERSHIP_STATUS_RECALLED defines this member as being recalled
                          - MEMBERSHIP_STATUS_EXPULSED: MEMBERSHIP_STATUS_EXPULSED defines this member as being expulsed
-                      title: >-
-                        MembershipStatus enumerates the valid membership states
-                        for a citizen of The
-
-                        Denom
                     nickname:
                       type: string
+                      title: nickname defines the nickname of this member
                     is_guardian:
                       type: boolean
+                      title: is_guardian defines whether this member is a guardian
                   title: >-
                     Member is a specialisation of BaseAccount that adds Member
                     Status and
@@ -84351,45 +84346,43 @@ definitions:
 
           type for additional functionality (e.g. vesting).
       status:
+        title: status defines the membership status of this member
         type: string
         enum:
-          - MEMBERSHIP_STATUS_UNDEFINED
+          - MEMBERSHIP_STATUS_UNSPECIFIED
           - MEMBERSHIP_STATUS_ELECTORATE
           - MEMBERSHIP_STATUS_INACTIVE
           - MEMBERSHIP_STATUS_RECALLED
           - MEMBERSHIP_STATUS_EXPULSED
-        default: MEMBERSHIP_STATUS_UNDEFINED
+        default: MEMBERSHIP_STATUS_UNSPECIFIED
         description: >-
-          - MEMBERSHIP_STATUS_UNDEFINED: MEMBERSHIP_STATUS_UNDEFINED defines a
-          no-op status
+          - MEMBERSHIP_STATUS_UNSPECIFIED: MEMBERSHIP_STATUS_UNSPECIFIED defines
+          a no-op status
            - MEMBERSHIP_STATUS_ELECTORATE: MEMBERSHIP_STATUS_ELECTORATE defines this member as being an active citizen
            - MEMBERSHIP_STATUS_INACTIVE: MEMBERSHIP_STATUS_INACTIVE defines this member as being an inactive citizen
            - MEMBERSHIP_STATUS_RECALLED: MEMBERSHIP_STATUS_RECALLED defines this member as being recalled
            - MEMBERSHIP_STATUS_EXPULSED: MEMBERSHIP_STATUS_EXPULSED defines this member as being expulsed
-        title: >-
-          MembershipStatus enumerates the valid membership states for a citizen
-          of The
-
-          Denom
       nickname:
         type: string
+        title: nickname defines the nickname of this member
       is_guardian:
         type: boolean
+        title: is_guardian defines whether this member is a guardian
     title: |-
       Member is a specialisation of BaseAccount that adds Member Status and
       Nickname
   membershipmodule.membership.MembershipStatus:
     type: string
     enum:
-      - MEMBERSHIP_STATUS_UNDEFINED
+      - MEMBERSHIP_STATUS_UNSPECIFIED
       - MEMBERSHIP_STATUS_ELECTORATE
       - MEMBERSHIP_STATUS_INACTIVE
       - MEMBERSHIP_STATUS_RECALLED
       - MEMBERSHIP_STATUS_EXPULSED
-    default: MEMBERSHIP_STATUS_UNDEFINED
+    default: MEMBERSHIP_STATUS_UNSPECIFIED
     description: >-
-      - MEMBERSHIP_STATUS_UNDEFINED: MEMBERSHIP_STATUS_UNDEFINED defines a no-op
-      status
+      - MEMBERSHIP_STATUS_UNSPECIFIED: MEMBERSHIP_STATUS_UNSPECIFIED defines a
+      no-op status
        - MEMBERSHIP_STATUS_ELECTORATE: MEMBERSHIP_STATUS_ELECTORATE defines this member as being an active citizen
        - MEMBERSHIP_STATUS_INACTIVE: MEMBERSHIP_STATUS_INACTIVE defines this member as being an inactive citizen
        - MEMBERSHIP_STATUS_RECALLED: MEMBERSHIP_STATUS_RECALLED defines this member as being recalled
@@ -84401,10 +84394,13 @@ definitions:
       Denom
   membershipmodule.membership.MsgEnrollResponse:
     type: object
+    title: MsgEnrollResponse is an empty response
   membershipmodule.membership.MsgUpdateDirectDemocracyResponse:
     type: object
+    title: MsgUpdateDirectDemocracyResponse is an empty response
   membershipmodule.membership.MsgUpdateStatusResponse:
     type: object
+    title: MsgUpdateStatusResponse is an empty response
   membershipmodule.membership.Params:
     type: object
     description: Params defines the parameters for the module.
@@ -84609,30 +84605,28 @@ definitions:
 
                 type for additional functionality (e.g. vesting).
             status:
+              title: status defines the membership status of this member
               type: string
               enum:
-                - MEMBERSHIP_STATUS_UNDEFINED
+                - MEMBERSHIP_STATUS_UNSPECIFIED
                 - MEMBERSHIP_STATUS_ELECTORATE
                 - MEMBERSHIP_STATUS_INACTIVE
                 - MEMBERSHIP_STATUS_RECALLED
                 - MEMBERSHIP_STATUS_EXPULSED
-              default: MEMBERSHIP_STATUS_UNDEFINED
+              default: MEMBERSHIP_STATUS_UNSPECIFIED
               description: >-
-                - MEMBERSHIP_STATUS_UNDEFINED: MEMBERSHIP_STATUS_UNDEFINED
+                - MEMBERSHIP_STATUS_UNSPECIFIED: MEMBERSHIP_STATUS_UNSPECIFIED
                 defines a no-op status
                  - MEMBERSHIP_STATUS_ELECTORATE: MEMBERSHIP_STATUS_ELECTORATE defines this member as being an active citizen
                  - MEMBERSHIP_STATUS_INACTIVE: MEMBERSHIP_STATUS_INACTIVE defines this member as being an inactive citizen
                  - MEMBERSHIP_STATUS_RECALLED: MEMBERSHIP_STATUS_RECALLED defines this member as being recalled
                  - MEMBERSHIP_STATUS_EXPULSED: MEMBERSHIP_STATUS_EXPULSED defines this member as being expulsed
-              title: >-
-                MembershipStatus enumerates the valid membership states for a
-                citizen of The
-
-                Denom
             nickname:
               type: string
+              title: nickname defines the nickname of this member
             is_guardian:
               type: boolean
+              title: is_guardian defines whether this member is a guardian
           title: >-
             Member is a specialisation of BaseAccount that adds Member Status
             and
@@ -84836,33 +84830,32 @@ definitions:
 
               type for additional functionality (e.g. vesting).
           status:
+            title: status defines the membership status of this member
             type: string
             enum:
-              - MEMBERSHIP_STATUS_UNDEFINED
+              - MEMBERSHIP_STATUS_UNSPECIFIED
               - MEMBERSHIP_STATUS_ELECTORATE
               - MEMBERSHIP_STATUS_INACTIVE
               - MEMBERSHIP_STATUS_RECALLED
               - MEMBERSHIP_STATUS_EXPULSED
-            default: MEMBERSHIP_STATUS_UNDEFINED
+            default: MEMBERSHIP_STATUS_UNSPECIFIED
             description: >-
-              - MEMBERSHIP_STATUS_UNDEFINED: MEMBERSHIP_STATUS_UNDEFINED defines
-              a no-op status
+              - MEMBERSHIP_STATUS_UNSPECIFIED: MEMBERSHIP_STATUS_UNSPECIFIED
+              defines a no-op status
                - MEMBERSHIP_STATUS_ELECTORATE: MEMBERSHIP_STATUS_ELECTORATE defines this member as being an active citizen
                - MEMBERSHIP_STATUS_INACTIVE: MEMBERSHIP_STATUS_INACTIVE defines this member as being an inactive citizen
                - MEMBERSHIP_STATUS_RECALLED: MEMBERSHIP_STATUS_RECALLED defines this member as being recalled
                - MEMBERSHIP_STATUS_EXPULSED: MEMBERSHIP_STATUS_EXPULSED defines this member as being expulsed
-            title: >-
-              MembershipStatus enumerates the valid membership states for a
-              citizen of The
-
-              Denom
           nickname:
             type: string
+            title: nickname defines the nickname of this member
           is_guardian:
             type: boolean
+            title: is_guardian defines whether this member is a guardian
         title: |-
           Member is a specialisation of BaseAccount that adds Member Status and
           Nickname
+    description: QueryMemberResponse contains the member details.
   membershipmodule.membership.QueryMembersResponse:
     type: object
     properties:
@@ -85064,30 +85057,28 @@ definitions:
 
                 type for additional functionality (e.g. vesting).
             status:
+              title: status defines the membership status of this member
               type: string
               enum:
-                - MEMBERSHIP_STATUS_UNDEFINED
+                - MEMBERSHIP_STATUS_UNSPECIFIED
                 - MEMBERSHIP_STATUS_ELECTORATE
                 - MEMBERSHIP_STATUS_INACTIVE
                 - MEMBERSHIP_STATUS_RECALLED
                 - MEMBERSHIP_STATUS_EXPULSED
-              default: MEMBERSHIP_STATUS_UNDEFINED
+              default: MEMBERSHIP_STATUS_UNSPECIFIED
               description: >-
-                - MEMBERSHIP_STATUS_UNDEFINED: MEMBERSHIP_STATUS_UNDEFINED
+                - MEMBERSHIP_STATUS_UNSPECIFIED: MEMBERSHIP_STATUS_UNSPECIFIED
                 defines a no-op status
                  - MEMBERSHIP_STATUS_ELECTORATE: MEMBERSHIP_STATUS_ELECTORATE defines this member as being an active citizen
                  - MEMBERSHIP_STATUS_INACTIVE: MEMBERSHIP_STATUS_INACTIVE defines this member as being an inactive citizen
                  - MEMBERSHIP_STATUS_RECALLED: MEMBERSHIP_STATUS_RECALLED defines this member as being recalled
                  - MEMBERSHIP_STATUS_EXPULSED: MEMBERSHIP_STATUS_EXPULSED defines this member as being expulsed
-              title: >-
-                MembershipStatus enumerates the valid membership states for a
-                citizen of The
-
-                Denom
             nickname:
               type: string
+              title: nickname defines the nickname of this member
             is_guardian:
               type: boolean
+              title: is_guardian defines whether this member is a guardian
           title: >-
             Member is a specialisation of BaseAccount that adds Member Status
             and

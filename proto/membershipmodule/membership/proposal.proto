@@ -7,9 +7,6 @@ option go_package = "github.com/noria-net/module-membership/x/membership/types";
 
 // DirectDemocracyUpdateProposal updates the guardians and the total voting weight
 message DirectDemocracyUpdateProposal {
-  option (gogoproto.goproto_stringer) = false;
-  option (gogoproto.goproto_getters) = false;
-
   string title = 1;
   string description = 2;
 

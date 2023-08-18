@@ -29,6 +29,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+// MsgEnroll provides details for a new membership enrollment.
 type MsgEnroll struct {
 	Creator  string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
 	Nickname string `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname,omitempty"`
@@ -81,6 +82,7 @@ func (m *MsgEnroll) GetNickname() string {
 	return ""
 }
 
+// MsgEnrollResponse is an empty response
 type MsgEnrollResponse struct {
 }
 
@@ -117,6 +119,7 @@ func (m *MsgEnrollResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgEnrollResponse proto.InternalMessageInfo
 
+// MsgUpdateStatus updates a member's electorate status
 type MsgUpdateStatus struct {
 	Creator string           `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
 	Address string           `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
@@ -177,6 +180,7 @@ func (m *MsgUpdateStatus) GetStatus() MembershipStatus {
 	return MembershipStatus_MemberStatusEmpty
 }
 
+// MsgUpdateStatusResponse is an empty response
 type MsgUpdateStatusResponse struct {
 }
 
@@ -213,6 +217,7 @@ func (m *MsgUpdateStatusResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateStatusResponse proto.InternalMessageInfo
 
+// MsgUpdateDirectDemocracy submits a proposal to update the guardians and/or total voting weight
 type MsgUpdateDirectDemocracy struct {
 	Creator           string                                  `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
 	AddGuardians      []string                                `protobuf:"bytes,2,rep,name=add_guardians,json=addGuardians,proto3" json:"add_guardians,omitempty"`
@@ -274,6 +279,7 @@ func (m *MsgUpdateDirectDemocracy) GetRemoveGuardians() []string {
 	return nil
 }
 
+// MsgUpdateDirectDemocracyResponse is an empty response
 type MsgUpdateDirectDemocracyResponse struct {
 }
 
@@ -370,8 +376,11 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
+	// Enroll creates a new membership enrollment
 	Enroll(ctx context.Context, in *MsgEnroll, opts ...grpc.CallOption) (*MsgEnrollResponse, error)
+	// UpdateStatus updates a member's electorate status
 	UpdateStatus(ctx context.Context, in *MsgUpdateStatus, opts ...grpc.CallOption) (*MsgUpdateStatusResponse, error)
+	// UpdateDirectDemocracy submits a proposal to update the guardians and/or total voting weight
 	UpdateDirectDemocracy(ctx context.Context, in *MsgUpdateDirectDemocracy, opts ...grpc.CallOption) (*MsgUpdateDirectDemocracyResponse, error)
 }
 
@@ -412,8 +421,11 @@ func (c *msgClient) UpdateDirectDemocracy(ctx context.Context, in *MsgUpdateDire
 
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
+	// Enroll creates a new membership enrollment
 	Enroll(context.Context, *MsgEnroll) (*MsgEnrollResponse, error)
+	// UpdateStatus updates a member's electorate status
 	UpdateStatus(context.Context, *MsgUpdateStatus) (*MsgUpdateStatusResponse, error)
+	// UpdateDirectDemocracy submits a proposal to update the guardians and/or total voting weight
 	UpdateDirectDemocracy(context.Context, *MsgUpdateDirectDemocracy) (*MsgUpdateDirectDemocracyResponse, error)
 }
 
