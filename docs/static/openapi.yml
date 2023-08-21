@@ -52439,9 +52439,16 @@ paths:
                     Status and
 
                     Nickname
+                description: guardians contains the list of guardians.
               total_voting_weight:
                 type: string
                 format: byte
+                description: >-
+                  total_voting_weight contains the total voting weight of all
+                  guardians.
+            description: >-
+              QueryGuardiansResponse is response type for the Query/Guardians
+              RPC method.
         default:
           description: An unexpected error response.
           schema:
@@ -52640,6 +52647,7 @@ paths:
             type: object
             properties:
               member:
+                description: member contains the member details.
                 type: object
                 properties:
                   base_account:
@@ -53052,6 +53060,7 @@ paths:
                         }
       parameters:
         - name: address
+          description: address defines the address of the member to query for.
           in: path
           required: true
           type: string
@@ -53323,6 +53332,9 @@ paths:
                            repeated Bar results = 1;
                            PageResponse page = 2;
                    }
+            description: >-
+              QueryMembersResponse is response type for the Query/Members RPC
+              method.
         default:
           description: An unexpected error response.
           schema:
@@ -84632,13 +84644,19 @@ definitions:
             and
 
             Nickname
+        description: guardians contains the list of guardians.
       total_voting_weight:
         type: string
         format: byte
+        description: total_voting_weight contains the total voting weight of all guardians.
+    description: >-
+      QueryGuardiansResponse is response type for the Query/Guardians RPC
+      method.
   membershipmodule.membership.QueryMemberResponse:
     type: object
     properties:
       member:
+        description: member contains the member details.
         type: object
         properties:
           base_account:
@@ -85110,6 +85128,7 @@ definitions:
                    repeated Bar results = 1;
                    PageResponse page = 2;
            }
+    description: QueryMembersResponse is response type for the Query/Members RPC method.
   membershipmodule.membership.QueryParamsResponse:
     type: object
     properties:

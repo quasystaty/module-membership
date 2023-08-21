@@ -116,6 +116,7 @@ func (m *QueryParamsResponse) GetParams() Params {
 
 // QueryMemberRequest specifies the member to query.
 type QueryMemberRequest struct {
+	// address defines the address of the member to query for.
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 }
 
@@ -161,6 +162,7 @@ func (m *QueryMemberRequest) GetAddress() string {
 
 // QueryMemberResponse contains the member details.
 type QueryMemberResponse struct {
+	// member contains the member details.
 	Member *Member `protobuf:"bytes,1,opt,name=member,proto3" json:"member,omitempty"`
 }
 
@@ -204,7 +206,9 @@ func (m *QueryMemberResponse) GetMember() *Member {
 	return nil
 }
 
+// QueryMembersRequest is request type for the Query/Members RPC method.
 type QueryMembersRequest struct {
+	// pagination defines an optional pagination for the request.
 	Pagination *query.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -248,6 +252,7 @@ func (m *QueryMembersRequest) GetPagination() *query.PageRequest {
 	return nil
 }
 
+// QueryMembersResponse is response type for the Query/Members RPC method.
 type QueryMembersResponse struct {
 	Members    []*Member           `protobuf:"bytes,1,rep,name=members,proto3" json:"members,omitempty"`
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
@@ -300,6 +305,7 @@ func (m *QueryMembersResponse) GetPagination() *query.PageResponse {
 	return nil
 }
 
+// QueryGuardiansRequest is request type for the Query/Guardians RPC method.
 type QueryGuardiansRequest struct {
 }
 
@@ -336,8 +342,11 @@ func (m *QueryGuardiansRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryGuardiansRequest proto.InternalMessageInfo
 
+// QueryGuardiansResponse is response type for the Query/Guardians RPC method.
 type QueryGuardiansResponse struct {
-	Members           []*Member                               `protobuf:"bytes,1,rep,name=members,proto3" json:"members,omitempty"`
+	// guardians contains the list of guardians.
+	Members []*Member `protobuf:"bytes,1,rep,name=members,proto3" json:"members,omitempty"`
+	// total_voting_weight contains the total voting weight of all guardians.
 	TotalVotingWeight *github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,2,opt,name=total_voting_weight,json=totalVotingWeight,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"total_voting_weight"`
 }
 

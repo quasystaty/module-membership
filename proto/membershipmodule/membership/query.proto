@@ -44,27 +44,36 @@ message QueryParamsResponse {
 
 // QueryMemberRequest specifies the member to query.
 message QueryMemberRequest {
+  // address defines the address of the member to query for.
   string address = 1;
 }
 
 // QueryMemberResponse contains the member details.
 message QueryMemberResponse {
+  // member contains the member details.
   Member member = 1;
 }
 
+// QueryMembersRequest is request type for the Query/Members RPC method.
 message QueryMembersRequest {
+  // pagination defines an optional pagination for the request.
   cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
 
+// QueryMembersResponse is response type for the Query/Members RPC method.
 message QueryMembersResponse {
   repeated Member members = 1 [(gogoproto.nullable) = true];
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
+// QueryGuardiansRequest is request type for the Query/Guardians RPC method.
 message QueryGuardiansRequest {}
 
+// QueryGuardiansResponse is response type for the Query/Guardians RPC method.
 message QueryGuardiansResponse {
+  // guardians contains the list of guardians.
   repeated Member members = 1 [(gogoproto.nullable) = true];
+  // total_voting_weight contains the total voting weight of all guardians.
   bytes total_voting_weight = 2 [
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = true,

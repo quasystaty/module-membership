@@ -11,8 +11,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/noria-net/module-membership/x/membership/client/utils"
-	"github.com/noria-net/module-membership/x/membership/types"
 	"github.com/spf13/cobra"
+
+	gov_v1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 )
 
 var _ = strconv.Itoa(0)
@@ -51,7 +52,7 @@ Otherwise the command will be rejected because there is no work to do.
 NOTE: The total voting weight must be a decimal value between 0 and 1, inlcusive.
 
 Example - Adding a guardian:
-$ %s tx membership update-direct-democracy <path/to/proposal.json> --from=<key_or_address>
+$ %s tx membership update-direct-democracy <path/to/proposal.json> --deposit %s --from=<key_or_address>
 
 where proposal.json contains:
 {
@@ -63,7 +64,7 @@ where proposal.json contains:
 }
 
 Example - Updating the total voting weight:
-$ %s tx membership update-direct-democracy <path/to/proposal.json> --from=<key_or_address>
+$ %s tx membership update-direct-democracy <path/to/proposal.json> --deposit %s --from=<key_or_address>
 
 where proposal.json contains:
 {
@@ -74,7 +75,9 @@ where proposal.json contains:
 
 `,
 				version.AppName,
+				"1000000unoria",
 				version.AppName,
+				"1000000unoria",
 			)),
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
@@ -86,31 +89,33 @@ where proposal.json contains:
 
 			// Parse the proposal
 			proposal, err := utils.ParseDirectDemocracyUpdateProposal(clientCtx.Codec, args[0])
-
-			addGuardians, err := cmd.Flags().GetStringArray(FlagAddGuardians)
 			if err != nil {
 				return err
 			}
 
-			removeGuardians, err := cmd.Flags().GetStringArray(FlagRemoveGuardians)
+			// Validate the proposal
+			err = proposal.ValidateBasic()
 			if err != nil {
 				return err
 			}
 
-			totalVotingWeight, err := cmd.Flags().GetString(FlagTotalVotingWeight)
+			// Get initial deposit
+			deposit, err := parseInitialDeposit(cmd)
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgUpdateDirectDemocracy(
-				clientCtx.GetFromAddress().String(),
-				addGuardians,
-				removeGuardians,
-				totalVotingWeight,
-			)
+			from := clientCtx.GetFromAddress()
+			msg, err := gov_v1beta1.NewMsgSubmitProposal(&proposal, deposit, from)
+			if err != nil {
+				return err
+			}
+
+			// TODO: Not sure if this also validates the proposal? Can we remove the ValidateBasic call above?
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
+
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}

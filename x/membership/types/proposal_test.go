@@ -50,7 +50,7 @@ func TestProposalValidation(t *testing.T) {
 		},
 	} {
 		t.Run(tc.desc, func(t *testing.T) {
-			err := tc.proposal.Validate()
+			err := tc.proposal.ValidateBasic()
 			if tc.err != nil {
 				require.ErrorContains(t, err, tc.err.Error())
 			} else {
