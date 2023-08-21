@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/noria-net/module-membership/x/membership/client/utils"
@@ -121,8 +120,7 @@ where proposal.json contains:
 	}
 
 	// Add flags
-	cmd.Flags().String(FlagTotalVotingWeight, "", "total voting weight of the electorate")
-	flags.AddTxFlagsToCmd(cmd)
+	// flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
 }

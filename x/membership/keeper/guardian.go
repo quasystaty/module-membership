@@ -60,7 +60,7 @@ func (k Keeper) GetGuardians(ctx sdk.Context) (guardians []*types.Member) {
 		if found && member.IsGuardian && member.Status == types.MembershipStatus_MemberElectorate {
 			guardians = append(guardians, &member)
 		}
-
+		// TODO: emit an event when encountering an invalid guardian
 	}
 
 	return guardians
