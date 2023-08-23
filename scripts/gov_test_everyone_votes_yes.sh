@@ -12,9 +12,9 @@ PROPOSAL_TEXT="proposal_text.json"
 
 # Enroll "me" and "val1"
 echo "Enrolling me"
-./tx.sh membershipd tx membership enroll --from me 
+./enroll.sh me --ignore
 echo "Enrolling val1"
-./tx-gas.sh membershipd tx membership enroll --from val1
+./enroll.sh val1 --ignore
 
 # Get me account membership
 #membershipd query membership get-member $ADDRESS_ME \
@@ -47,8 +47,11 @@ echo "val2 voting Yes on proposal $PROPOSAL_ID"
 echo "me voting Yes on proposal $PROPOSAL_ID"
 ./tx-gas.sh membershipd tx gov vote $PROPOSAL_ID Yes --from me
 
-# wait for proposal to pass by looping forever
+# Loop until the STATUS is either "PROPOSAL_STATUS_REJECTED" or "PROPOSAL_STATUS_PASSED"
 while true; do
-    membershipd query gov proposal $PROPOSAL_ID --output json | jq --color-output
+    STATUS=$(membershipd query gov proposal $PROPOSAL_ID --output json | jq -r '.proposal.status')
+    if [ $STATUS == "PROPOSAL_STATUS_REJECTED" ] || [ $STATUS == "PROPOSAL_STATUS_PASSED" ]; then
+        break
+    fi
     sleep 2
-done 
+done

@@ -38,13 +38,14 @@ func (k Keeper) Tally(ctx sdk.Context, proposal govtypes_v1.Proposal) (passes bo
 
 	memberResults := NewEmptyVoteOptions()
 	guardianResults := NewEmptyVoteOptions()
+
+	totalVotingWeight := k.GetDirectDemocracySettings(ctx).TotalVotingWeight
 	guardians := k.GetGuardians(ctx)
 
 	memberPower, guardianPower := calculateVotePower(
 		int64(k.GetMemberStatusCount(ctx, types.MembershipStatus_MemberElectorate)),
 		int64(len(guardians)),
-		math.LegacyZeroDec(),
-		//		k.GetTotalVotingWeight(ctx),
+		totalVotingWeight,
 	)
 
 	k.IterateVotes(ctx, proposal.Id, func(vote govtypes_v1.Vote) (stop bool) {
