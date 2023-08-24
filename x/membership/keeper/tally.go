@@ -223,7 +223,12 @@ func calculateVotePower(numTotalMembers int64, numGuardians int64, totalVotingWe
 
 	// Member count excludes guardians
 	numMembers := numTotalMembers - numGuardians
-	memberPower = sdk.NewDec(1).Sub(totalVotingWeight).QuoInt64(numMembers)
+	// all members are guardians
+	if numMembers == 0 {
+		memberPower = sdk.NewDec(0)
+	} else {
+		memberPower = sdk.NewDec(1).Sub(totalVotingWeight).QuoInt64(numMembers)
+	}
 	guardianPower = totalVotingWeight.QuoInt64(numGuardians)
 
 	return memberPower, guardianPower
