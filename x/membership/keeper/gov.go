@@ -31,14 +31,14 @@ func (k Keeper) RefundAndDeleteDeposits(ctx sdk.Context, proposalID uint64) {
 	k.govKeeper.RefundAndDeleteDeposits(ctx, proposalID)
 }
 
-// IsLegitimateProposal returns true if this proposal was created by an electorate member
+// IsLegitimateProposal returns true if this proposal exists and was created by an electorate member
 func (k Keeper) IsLegitimateProposal(ctx sdk.Context, proposal govtypes_v1.Proposal) bool {
 	p, proposalExists := k.govKeeper.GetProposal(ctx, proposal.Id)
 	if !proposalExists {
 		return false
 	}
 
-	return k.IsMemberByBech32Address(ctx, p.Proposer)
+	return k.IsMember(ctx, sdk.MustAccAddressFromBech32(p.Proposer))
 }
 
 // SetProposal writes the updated proposal to the store

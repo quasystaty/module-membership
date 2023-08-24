@@ -120,11 +120,6 @@ func (k Keeper) GetMemberNickname(ctx sdk.Context, address sdk.AccAddress) strin
 	return string(bz)
 }
 
-func (k Keeper) IsMemberByBech32Address(ctx sdk.Context, bech32Address string) bool {
-	address := sdk.AccAddress(bech32Address)
-	return k.IsMember(ctx, address)
-}
-
 func (k Keeper) IsMember(ctx sdk.Context, address sdk.AccAddress) bool {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte{})
 	key := types.MemberKey(address)

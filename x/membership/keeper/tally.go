@@ -31,10 +31,24 @@ type combinedTallyResults struct {
 // voters
 func (k Keeper) Tally(ctx sdk.Context, proposal govtypes_v1.Proposal) (passes bool, burnDeposits bool, tallyResults govtypes_v1.TallyResult) {
 
-	// Proposal can only be submitted by a member
-	if !k.IsMemberByBech32Address(ctx, proposal.Proposer) {
+	// Ensure this is a legitimate proposal
+	if !k.IsLegitimateProposal(ctx, proposal) {
 		return false, false, govtypes_v1.TallyResult{}
 	}
+
+	// Proposal can only be submitted by a member
+	/*
+		_, found := k.GetMemberAccount(ctx, sdk.MustAccAddressFromBech32(proposal.Proposer))
+		if !found {
+			return false, false, govtypes_v1.TallyResult{}
+		}
+	*/
+
+	/*
+		if !k.IsMemberByBech32Address(ctx, proposal.Proposer) {
+			return false, false, govtypes_v1.TallyResult{}
+		}
+	*/
 
 	memberResults := NewEmptyVoteOptions()
 	guardianResults := NewEmptyVoteOptions()
