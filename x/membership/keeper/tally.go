@@ -36,20 +36,6 @@ func (k Keeper) Tally(ctx sdk.Context, proposal govtypes_v1.Proposal) (passes bo
 		return false, false, govtypes_v1.TallyResult{}
 	}
 
-	// Proposal can only be submitted by a member
-	/*
-		_, found := k.GetMemberAccount(ctx, sdk.MustAccAddressFromBech32(proposal.Proposer))
-		if !found {
-			return false, false, govtypes_v1.TallyResult{}
-		}
-	*/
-
-	/*
-		if !k.IsMemberByBech32Address(ctx, proposal.Proposer) {
-			return false, false, govtypes_v1.TallyResult{}
-		}
-	*/
-
 	memberResults := NewEmptyVoteOptions()
 	guardianResults := NewEmptyVoteOptions()
 
@@ -228,7 +214,7 @@ func calculateVoteResults(proposal govtypes_v1.Proposal,
 }
 
 // calculateVotePower calculates the voting power of members and guardians
-func calculateVotePower(numElectorateMembers int64, numGuardians int64, totalVotingWeight math.LegacyDec) (memberPower math.LegacyDec, guardianPower math.LegacyDec) {
+func calculateVotePower(numTotalMembers int64, numGuardians int64, totalVotingWeight math.LegacyDec) (memberPower math.LegacyDec, guardianPower math.LegacyDec) {
 
 	// Ensure total voting weight is inclusively between 0 and 1
 	if totalVotingWeight.LT(math.LegacyZeroDec()) || totalVotingWeight.GT(math.LegacyOneDec()) {
@@ -236,7 +222,7 @@ func calculateVotePower(numElectorateMembers int64, numGuardians int64, totalVot
 	}
 
 	// Member count excludes guardians
-	numMembers := numElectorateMembers - numGuardians
+	numMembers := numTotalMembers - numGuardians
 	memberPower = sdk.NewDec(1).Sub(totalVotingWeight).QuoInt64(numMembers)
 	guardianPower = totalVotingWeight.QuoInt64(numGuardians)
 
