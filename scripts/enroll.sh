@@ -28,9 +28,8 @@ fi
 
 # Try and enroll the member
 # If the address is already enrolled, the script will fail unless the IGNORE_ALREADY_ENROLLED argument is set
-$DAEMON_BINARY query membership member $ADDRESS --output json | grep "member not found" > /dev/null 2>&1
-# Only exit if the return code is non-zero and --ignore is not set
-if [ $? -eq 1 ]; then
+if ! $DAEMON_BINARY query membership member $ADDRESS --output json 2>&1 | grep -q "member not found"; then
+    # Command failed with "member not found" error
     if [ -z "$IGNORE_ALREADY_ENROLLED" ]; then
         echo "ERROR: $ADDRESS is already enrolled"
         echo "Use the '--ignore' argument to enroll anyway"

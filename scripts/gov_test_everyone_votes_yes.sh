@@ -49,8 +49,9 @@ echo "me voting Yes on proposal $PROPOSAL_ID"
 
 # Loop until the STATUS is either "PROPOSAL_STATUS_REJECTED" or "PROPOSAL_STATUS_PASSED"
 while true; do
-    STATUS=$(membershipd query gov proposal $PROPOSAL_ID --output json | jq -r '.proposal.status')
-    if [ $STATUS == "PROPOSAL_STATUS_REJECTED" ] || [ $STATUS == "PROPOSAL_STATUS_PASSED" ]; then
+    STATUS=$(membershipd query gov proposal $PROPOSAL_ID --output json | jq -r '.status')
+    echo "Proposal status: $STATUS"
+    if [ "$STATUS" = "PROPOSAL_STATUS_REJECTED" ] || [ "$STATUS" = "PROPOSAL_STATUS_PASSED" ]; then
         break
     fi
     sleep 2
