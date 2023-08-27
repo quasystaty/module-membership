@@ -116,7 +116,7 @@ func (suite *CalculateVoteResultsTestSuite) Test_GuardiansVoteNoMembersVoteYesAn
 	suite.Assert().Equal("49", tallyResults.GetYesCount())
 }
 
-func (suite *CalculateVoteResultsTestSuite) Test_AllMembersAreGuardians() {
+func (suite *CalculateVoteResultsTestSuite) Test_AllMembersAreGuardiansAndAllVoteYes() {
 	memberResults := NewEmptyVoteOptions()
 	guardianResults := NewEmptyVoteOptions()
 	totalVotingWeight := math.LegacyMustNewDecFromStr("0.51")
@@ -135,7 +135,7 @@ func (suite *CalculateVoteResultsTestSuite) Test_AllMembersAreGuardians() {
 
 	suite.Assert().False(passes)
 	suite.Assert().False(burnDeposits)
-	suite.Assert().Equal("49", tallyResults.GetYesCount())
+	suite.Assert().Equal("51", tallyResults.GetYesCount())
 }
 
 // Test Case: No votes are cast and proposal fails
